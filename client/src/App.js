@@ -1,7 +1,8 @@
 import React from 'react';
+import ArtifactsCards from './components/Cards/ArtifactsCards';
 
 function App() {
-  return <div className="App">Hello World!</div>;
+  return <ArtifactsCards />;
 }
 
 export default App;

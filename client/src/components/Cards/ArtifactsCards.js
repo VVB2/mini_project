@@ -9,6 +9,7 @@ const Home = () => {
       {Object.keys(artifacts).map((item, i) => (
         <div key={i}>
           <ArtifactsCard data={artifacts[item]} />
+          <br />
         </div>
       ))}
     </div>

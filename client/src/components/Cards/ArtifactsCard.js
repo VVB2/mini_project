@@ -14,7 +14,7 @@ function ArtifactsCard({ data }) {
     <Card>
       <CardActionArea>
         <CardMedia
-          image={data.primaryImageSmall}
+          image={data.coverImage}
           title={data.title}
           style={{ height: '100px', width: '100%' }}
         />

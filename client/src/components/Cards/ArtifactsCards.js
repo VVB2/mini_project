@@ -1,17 +1,79 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Pagination } from '@material-ui/lab';
+// import { BrowserRouter as Router } from 'react-router-dom';
+import axios from 'axios';
+import Loading from '../Loading/Loading';
 import ArtifactsCard from './ArtifactsCard';
-import * as artifacts from '../../assets/Data.json';
 
 const Home = () => {
-  console.log(artifacts.length);
-  return (
+  const [isLoading, setIsloading] = useState(false);
+  const [page, setPage] = useState(1);
+  const [limitData, setLimitData] = useState({ from: 1, to: 10 });
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    setIsloading(true);
+    axios
+      .get(
+        `http://localhost:5000/api/products/?from=${limitData.from}&to=${limitData.to}`
+      )
+      .then((res) => {
+        setData(res.data.data);
+        setIsloading(false);
+      });
+  }, [limitData.from, limitData.to]);
+
+  function changeData(pageNo) {
+    setLimitData({ from: pageNo * 10 - 9, to: pageNo * 10 });
+  }
+
+  return isLoading ? (
     <div>
-      {Object.keys(artifacts).map((item, i) => (
+      <Loading />
+      <Pagination
+        count={17}
+        page={page}
+        boundaryCount={1}
+        color="secondary"
+        shape="rounded"
+        variant="outlined"
+        onChange={(event, value) => {
+          setPage(value);
+          changeData(value);
+        }}
+        style={{
+          padding: '20px',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      />
+    </div>
+  ) : (
+    <div>
+      {Object.keys(data).map((item, i) => (
         <div key={i}>
-          <ArtifactsCard data={artifacts[item]} />
-          <br />
+          <ArtifactsCard data={data[item]} />
         </div>
       ))}
+      <Pagination
+        count={17}
+        page={page}
+        color="secondary"
+        siblingCount={1}
+        shape="rounded"
+        variant="outlined"
+        onChange={(event, value) => {
+          setPage(value);
+          changeData(value);
+        }}
+        style={{
+          padding: '20px',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      />
     </div>
   );
 };

@@ -22,7 +22,7 @@ exports.getAllProducts = async (req, res, next) => {
 exports.getProductsById = async (req, res, next) => {
     try {
         const id = req.params.id;
-        const bootcamp = await artifactModel.find({ id });
+        const bootcamp = await artifactModel.find({ _id: id });
         res.send({
             status: 400,
             data: bootcamp,

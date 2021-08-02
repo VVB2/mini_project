@@ -17,3 +17,4 @@ app.use(express.json());
 
 //Routes
 app.use('/api/products', require('./routes/Products'));
+app.use('/api/createUser', require('./routes/User'));

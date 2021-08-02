@@ -5,15 +5,15 @@ import moment from 'moment';
 
 function ArtifactsCard({ data }) {
   return (
-    <Card style={{ marginBottom: '10px' }}>
+    <Card style={{ marginBottom: '20px' }}>
       <Grid container spacing={3}>
         <Grid item xs={4}>
           <img
             src={data.coverImage}
             alt={data.title}
             style={{
-              width: '80%',
-              height: '300px',
+              width: '65%',
+              height: '200px',
             }}
           />
         </Grid>

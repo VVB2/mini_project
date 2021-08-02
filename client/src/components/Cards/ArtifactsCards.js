@@ -30,24 +30,6 @@ const Home = () => {
   return isLoading ? (
     <div>
       <Loading />
-      <Pagination
-        count={17}
-        page={page}
-        boundaryCount={1}
-        color="secondary"
-        shape="rounded"
-        variant="outlined"
-        onChange={(event, value) => {
-          setPage(value);
-          changeData(value);
-        }}
-        style={{
-          padding: '20px',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      />
     </div>
   ) : (
     <div>
@@ -61,7 +43,6 @@ const Home = () => {
         page={page}
         color="secondary"
         siblingCount={1}
-        shape="rounded"
         variant="outlined"
         onChange={(event, value) => {
           setPage(value);

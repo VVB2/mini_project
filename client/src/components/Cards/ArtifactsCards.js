@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Pagination } from '@material-ui/lab';
-// import { BrowserRouter as Router } from 'react-router-dom';
 import axios from 'axios';
 import Loading from '../Loading/Loading';
 import ArtifactsCard from './ArtifactsCard';

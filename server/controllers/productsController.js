@@ -3,13 +3,25 @@ const artifactModel = require('../models/Artifacts.model');
 exports.getAllProducts = async (req, res, next) => {
     const { from, to } = req.query;
     try {
-        const bootcamp = await artifactModel.find({
-            id: { $gte: from, $lte: to },
-        });
-        res.send({
-            status: 400,
-            data: bootcamp,
-        });
+        if (from && to) {
+            const artifacts = await artifactModel.find({
+                id: { $gte: from, $lte: to },
+            });
+            res.send({
+                status: 400,
+                data: artifacts,
+            });
+        } else {
+            const artifacts = await artifactModel.find();
+            const names = [];
+            for (const index in artifacts) {
+                names.push(artifacts[index].title);
+            }
+            res.send({
+                status: 400,
+                data: names,
+            });
+        }
     } catch (error) {
         console.log(error);
         res.send({
@@ -22,10 +34,10 @@ exports.getAllProducts = async (req, res, next) => {
 exports.getProductsById = async (req, res, next) => {
     try {
         const id = req.params.id;
-        const bootcamp = await artifactModel.find({ _id: id });
+        const artifacts = await artifactModel.find({ _id: id });
         res.send({
             status: 400,
-            data: bootcamp,
+            data: artifacts,
         });
     } catch (error) {
         console.log(error);

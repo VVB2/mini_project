@@ -15,11 +15,12 @@ import { createFilterOptions } from '@material-ui/lab/Autocomplete';
 
 const useStyles = makeStyles(() => ({
   grow: {
-    flexGrow: 2,
+    flexGrow: 1,
   },
   search: {
     flexGrow: 1,
-    width: '50ch',
+    width: '120ch',
+    marginLeft: '5rem',
   },
 }));
 
@@ -41,10 +42,9 @@ const Header = () => {
     <div style={{ marginBottom: '60px' }}>
       <AppBar position="fixed" color="inherit">
         <Toolbar>
-          <Typography variant="h6" className={classes.grow}>
-            Artifacts Shop
-          </Typography>
+          <Typography variant="h6">Artifacts Shop</Typography>
           <Autocomplete
+            className={classes.grow}
             options={name.map((option) => option)}
             filterOptions={filterOptions}
             renderInput={(params) => (

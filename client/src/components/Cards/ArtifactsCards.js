@@ -38,7 +38,7 @@ const Home = () => {
         </div>
       ))}
       <Pagination
-        count={17}
+        count={14}
         page={page}
         color="secondary"
         siblingCount={1}

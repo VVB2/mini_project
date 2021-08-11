@@ -4,7 +4,6 @@ const artifactsSchema = mongoose.Schema({
     accessionYear: String,
     additionalImages: Array,
     artistName: String,
-    artistWikidata: String,
     classification: String,
     country: String,
     creditLine: String,
@@ -18,6 +17,7 @@ const artifactsSchema = mongoose.Schema({
     isSold: Boolean,
     measurements: Array,
     rating: Number,
+    desc: String,
 });
 
 const ArtifactsModel = mongoose.model('ArtifactsData', artifactsSchema);

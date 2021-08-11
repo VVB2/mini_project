@@ -23,7 +23,6 @@ exports.getAllProducts = async (req, res, next) => {
             });
         }
     } catch (error) {
-        console.log(error);
         res.send({
             status: 401,
             data: error,
@@ -34,11 +33,24 @@ exports.getAllProducts = async (req, res, next) => {
 exports.getProductsById = async (req, res, next) => {
     try {
         const id = req.params.id;
-        const artifacts = await artifactModel.find({ _id: id });
-        res.send({
-            status: 400,
-            data: artifacts,
-        });
+        const artifacts = await artifactModel.find({ id });
+        const { department } = artifacts[0];
+        try {
+            const similarArtifacts = await artifactModel.aggregate([
+                { $match: { department } },
+                { $sample: { size: 6 } },
+            ]);
+            res.send({
+                status: 400,
+                data: { artifacts, similarArtifacts },
+            });
+        } catch (error) {
+            console.log(error);
+            res.send({
+                status: 401,
+                error,
+            });
+        }
     } catch (error) {
         console.log(error);
         res.send({

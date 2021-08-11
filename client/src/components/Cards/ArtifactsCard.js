@@ -6,24 +6,24 @@ import moment from 'moment';
 function ArtifactsCard({ data }) {
   return (
     <Card style={{ marginBottom: '20px' }}>
-      <Grid container spacing={3}>
-        <Grid item xs={4}>
+      <Grid container>
+        <Grid item xs={3}>
           <img
             src={data.coverImage}
             alt={data.title}
             style={{
-              width: '65%',
+              width: '80%',
               height: '200px',
             }}
           />
         </Grid>
-        <Grid item xs={8}>
+        <Grid item xs={9}>
           <Typography color="textPrimary" variant="h5" gutterBottom>
-            {data.title}
+            {data.title.replace(/(.{50})..+/, '$1…')}
           </Typography>
           <Rating name="size-medium" value={data.rating} readOnly />
           <Typography color="error" variant="h6" gutterBottom>
-            <b>{`₹ ${new Intl.NumberFormat('en-IN').format(data.price)}`}</b>
+            ₹<b>{` ${new Intl.NumberFormat('en-IN').format(data.price)}`}</b>
           </Typography>{' '}
           <Typography color="textSecondary" variant="body1" gutterBottom>
             {data.creditLine}

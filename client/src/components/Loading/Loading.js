@@ -7,10 +7,10 @@ const Loading = () => (
     {[...Array(10)].map((x, i) => (
       <Card style={{ marginBottom: '20px' }} key={i}>
         <Grid container spacing={3}>
-          <Grid item xs={4}>
-            <Skeleton variant="rect" height={200} />
+          <Grid item xs={3}>
+            <Skeleton variant="rect" height={200} width="80%" />
           </Grid>
-          <Grid item xs={8}>
+          <Grid item xs={9}>
             <Typography variant="h5">
               <Skeleton />
             </Typography>

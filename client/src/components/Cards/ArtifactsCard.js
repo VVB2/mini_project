@@ -4,6 +4,7 @@ import { Rating } from '@material-ui/lab';
 import moment from 'moment';
 
 function ArtifactsCard({ data }) {
+  const days = Math.floor(Math.random() * 5) + 1;
   return (
     <Card style={{ marginBottom: '20px' }}>
       <Grid container>
@@ -29,10 +30,14 @@ function ArtifactsCard({ data }) {
             {data.creditLine}
           </Typography>
           <Typography color="textSecondary" variant="body2" gutterBottom>
-            Get it by <b>Tomorrow, {moment().format('LL')}</b>
+            Get it by{' '}
+            <b>
+              {moment().add(days, 'days').calendar().slice(0, -12)}{' '}
+              {moment().add(days, 'days').format('LL')}
+            </b>
           </Typography>
           <Typography color="textSecondary" variant="body2">
-            Free Delivery By <b>Amazon</b>
+            Free Delivery By <b>Artifacts Shop</b>
           </Typography>
         </Grid>
       </Grid>

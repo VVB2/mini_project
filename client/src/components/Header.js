@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React from 'react';
 import {
   AppBar,
   Typography,
@@ -19,24 +18,17 @@ const useStyles = makeStyles(() => ({
   },
   search: {
     flexGrow: 1,
-    width: '120ch',
-    marginLeft: '5rem',
+    width: '76.5%',
+    marginLeft: '11.5rem',
   },
 }));
 
-const Header = () => {
-  const [name, setName] = useState([]);
+const Header = ({ data, childname }) => {
   const classes = useStyles();
   const filterOptions = createFilterOptions({
     stringify: (option) => option,
     limit: 10,
   });
-
-  useEffect(() => {
-    axios.get('http://localhost:5000/api/products/').then((res) => {
-      setName(res.data.data);
-    });
-  }, []);
 
   return (
     <div style={{ marginBottom: '60px' }}>
@@ -45,18 +37,20 @@ const Header = () => {
           <Typography variant="h6">Artifacts Shop</Typography>
           <Autocomplete
             className={classes.grow}
-            options={name.map((option) => option)}
+            options={data.map((option) => option.name)}
+            getOptionLabel={(option) => option}
             filterOptions={filterOptions}
             renderInput={(params) => (
               <TextField
                 // eslint-disable-next-line react/jsx-props-no-spreading
                 {...params}
-                label="Search..."
+                label="Search the Store..."
                 variant="outlined"
                 className={classes.search}
               />
             )}
             onChange={(event, value) => {
+              childname(value);
               console.log(value);
             }}
           />

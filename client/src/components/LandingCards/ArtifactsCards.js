@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Pagination } from '@material-ui/lab';
+import { Pagination, PaginationItem } from '@material-ui/lab';
+import { Link } from 'react-router-dom';
 import Loading from '../Loading/Loading';
 import ArtifactsCard from './ArtifactsCard';
 
@@ -7,7 +8,7 @@ const Home = ({ data, isLoading, childPaginate }) => {
   const [page, setPage] = useState(1);
 
   function changeData(pageNo) {
-    childPaginate({ gte: pageNo * 10 - 9, lte: pageNo * 10 });
+    childPaginate(pageNo);
   }
 
   return isLoading ? (
@@ -31,6 +32,16 @@ const Home = ({ data, isLoading, childPaginate }) => {
           setPage(value);
           changeData(value);
         }}
+        renderItem={(item) => (
+          <PaginationItem
+            type="start-ellipsis"
+            component={Link}
+            selected
+            to={`/${item.page}`}
+            // eslint-disable-next-line react/jsx-props-no-spreading
+            {...item}
+          />
+        )}
         style={{
           padding: '20px',
           display: 'flex',

@@ -4,15 +4,16 @@ import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import axios from 'axios';
-import ArtifactsCards from './components/Cards/ArtifactsCards';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import ArtifactsCards from './components/LandingCards/ArtifactsCards';
 import Header from './components/Header';
 
 function App() {
-  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: light)');
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const [name, setName] = useState([]);
   const [search, setSearch] = useState('');
   const [isloading, setIsloading] = useState(true);
-  const [limitData, setLimitData] = useState({ from: 1, to: 10 });
+  const [page, setPage] = useState(1);
   const [data, setData] = useState([]);
 
   const theme = React.useMemo(
@@ -37,7 +38,9 @@ function App() {
       // pagination data
       axios
         .get(
-          `http://localhost:5000/api/products/?from=${limitData.from}&to=${limitData.to}`
+          `http://localhost:5000/api/products/?from=${page * 10 - 9}&to=${
+            page * 10
+          }`
         )
         .then((res) => {
           setData(res.data.data);
@@ -45,6 +48,12 @@ function App() {
         });
 
       // serach data
+    };
+    fetchData();
+  }, [page]);
+
+  useEffect(() => {
+    const fetchData = () => {
       if (search !== '') {
         axios
           .get(`http://localhost:5000/api/products/product/${search}`)
@@ -54,29 +63,41 @@ function App() {
       }
     };
     fetchData();
-  }, [search, limitData.from, limitData.to]);
+  }, [search]);
 
   const childname = (returnedName) => {
     setSearch(returnedName);
   };
 
-  const childPaginate = ({ gte, lte }) => {
-    setLimitData({ from: gte, to: lte });
+  const childPaginate = (pageNo) => {
+    setPage(pageNo);
   };
 
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Container>
-        <Header data={name} childname={childname} />
-        <br />
-        <ArtifactsCards
-          data={data}
-          isLoading={isloading}
-          childPaginate={childPaginate}
-        />
-      </Container>
-    </ThemeProvider>
+    <Router>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Container>
+          <Header data={name} childname={childname} />
+          <br />
+          <ArtifactsCards
+            data={data}
+            isLoading={isloading}
+            childPaginate={childPaginate}
+          />
+        </Container>
+      </ThemeProvider>
+      {/* Routes of front end */}
+      <Switch>
+        <Route path="/:page">
+          <ArtifactsCards
+            data={data}
+            isLoading={isloading}
+            childPaginate={childPaginate}
+          />
+        </Route>
+      </Switch>
+    </Router>
   );
 }
 

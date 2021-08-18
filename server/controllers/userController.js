@@ -1,57 +1,64 @@
 const userModel = require('../models/User.model');
-const bcrypt = require('bcryptjs');
 
-// bcrypt.compare(
-//     'B4c0//',
-//     '$2a$10$zhtceCU0DbiZJozLwFz5ke1GYsLNjbLzk1fpNpG4e/y3VxvkHJ7Fu',
-//     function (err, res) {
-//         console.log(res);
-//     }
-// );
-
-exports.createUser = (req, res, next) => {
-    bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash('B4c0//', salt, async (err, hash) => {
-            const User = {
-                username: req.body.username,
-                email: req.body.email,
-                password: hash,
-            };
-            try {
-                const user = await new userModel(User).save();
-                res.send({
-                    status: 201,
-                    data: user,
-                });
-            } catch (error) {
-                res.send({
-                    status: 200,
-                    data: error,
-                });
-            }
+exports.register = async (req, res, next) => {
+    const { username, email, password } = req.body;
+    try {
+        const user = await userModel.create({
+            username,
+            email,
+            password,
         });
-    });
-};
-
-exports.getUser = async (req, res, next) => {
-    const { email } = req.query;
-    const user = await userModel.find({ email });
-    if (user) {
-        try {
-            res.send({
-                status: 400,
-                data: user,
-            });
-        } catch (error) {
-            res.send({
-                status: 404,
-                data: error,
-            });
-        }
-    } else {
-        res.send({
-            status: 404,
-            message: 'User not found',
+        res.status(201).json({
+            success: true,
+            user,
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message,
         });
     }
+};
+
+exports.login = async (req, res, next) => {
+    const { email, password } = req.body;
+    if (!email || !password) {
+        res.status(400).json({
+            success: false,
+            error: 'Please provide email and password',
+        });
+    }
+    try {
+        const user = await userModel.findOne({ email }).select('+password');
+        if (!user) {
+            res.status(404).json({
+                success: false,
+                error: 'Invalid credentials',
+            });
+        }
+        const isMatch = await user.matchPassword(password);
+        if (!isMatch) {
+            res.status(404).json({
+                success: false,
+                error: 'Invalid credentials',
+            });
+        }
+        res.status(200).json({
+            success: true,
+            token: '36tregfkufgwuefgu',
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: error.message,
+        });
+    }
+};
+
+exports.forgotpassword = async (req, res, next) => {
+    res.send('Forgot password route');
+};
+
+exports.resetpassword = async (req, res, next) => {
+    res.send('Reset password route');
 };

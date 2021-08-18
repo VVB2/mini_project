@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   AppBar,
   Typography,
@@ -15,9 +16,9 @@ import { createFilterOptions } from '@material-ui/lab/Autocomplete';
 const useStyles = makeStyles(() => ({
   grow: {
     flexGrow: 1,
+    padding: '10px',
   },
   search: {
-    flexGrow: 1,
     width: '76.5%',
     marginLeft: '11.5rem',
   },
@@ -31,10 +32,18 @@ const Header = ({ data, childname }) => {
   });
 
   return (
-    <div style={{ marginBottom: '60px' }}>
+    <div style={{ marginBottom: '70px' }}>
       <AppBar position="fixed" color="inherit">
         <Toolbar>
-          <Typography variant="h6">Artifacts Shop</Typography>
+          <Typography
+            variant="h6"
+            component={Link}
+            to="/"
+            color="inherit"
+            style={{ textDecoration: 'none' }}
+          >
+            Artifacts Shop
+          </Typography>
           <Autocomplete
             className={classes.grow}
             options={data.map((option) => option.name)}
@@ -50,14 +59,16 @@ const Header = ({ data, childname }) => {
               />
             )}
             onChange={(event, value) => {
-              childname(value);
-              console.log(value);
+              if (value !== null) childname(value);
             }}
           />
           <IconButton
             aria-label="cart of current user"
             aria-controls="menu-appbar"
             color="inherit"
+            onClick={() => {
+              console.log('hii');
+            }}
           >
             <Badge badgeContent={4} color="secondary">
               <ShoppingCart style={{ fontSize: 36 }} />

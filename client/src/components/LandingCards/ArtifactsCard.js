@@ -14,7 +14,7 @@ function ArtifactsCard({ data }) {
             alt={data.title}
             style={{
               width: '80%',
-              height: '200px',
+              height: '250px',
             }}
           />
         </Grid>
@@ -32,7 +32,7 @@ function ArtifactsCard({ data }) {
           <Typography color="textSecondary" variant="body2" gutterBottom>
             Get it by{' '}
             <b>
-              {moment().add(days, 'days').calendar().slice(0, -12)}{' '}
+              {moment().add(days, 'days').calendar().slice(0, -11)}{' '}
               {moment().add(days, 'days').format('LL')}
             </b>
           </Typography>

@@ -28,7 +28,7 @@ const Header = ({ data, childname }) => {
   const classes = useStyles();
   const filterOptions = createFilterOptions({
     stringify: (option) => option,
-    limit: 10,
+    limit: 8,
   });
 
   return (

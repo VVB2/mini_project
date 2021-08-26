@@ -1,17 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Pagination, PaginationItem } from '@material-ui/lab';
 import { Link } from 'react-router-dom';
 import Loading from '../Loading/Loading';
 import ArtifactsCard from './ArtifactsCard';
 
-const Home = ({ data, isLoading, childPaginate }) => {
-  const [page, setPage] = useState(1);
+const ArtifactsCards = ({ location }) => {
+  const urlPage = parseInt(location.search.substring(3), 10);
+  const [page, setPage] = useState(urlPage);
+  const [isloading, setIsloading] = useState(true);
+  const [data, setData] = useState([]);
 
   function changeData(pageNo) {
-    childPaginate(pageNo);
+    window.scrollTo(0, 0);
+    setPage(pageNo);
   }
 
-  return isLoading ? (
+  useEffect(() => {
+    // pagination data
+    const fetchData = async () => {
+      setIsloading(true);
+      await axios
+        .get(
+          `http://localhost:5000/api/products/?from=${page * 10 - 9}&to=${
+            page * 10
+          }`
+        )
+        .then((res) => {
+          setData(res.data.data);
+          setIsloading(false);
+        });
+    };
+    fetchData();
+  }, [page]);
+
+  return isloading ? (
     <div>
       <Loading />
     </div>
@@ -37,7 +60,7 @@ const Home = ({ data, isLoading, childPaginate }) => {
             type="start-ellipsis"
             component={Link}
             selected
-            to={`/${item.page}`}
+            to={`/products?p=${item.page}`}
             // eslint-disable-next-line react/jsx-props-no-spreading
             {...item}
           />
@@ -53,4 +76,4 @@ const Home = ({ data, isLoading, childPaginate }) => {
   );
 };
 
-export default Home;
+export default ArtifactsCards;

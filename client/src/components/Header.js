@@ -12,6 +12,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Autocomplete } from '@material-ui/lab';
 import { AccountCircle, ShoppingCart } from '@material-ui/icons';
 import { createFilterOptions } from '@material-ui/lab/Autocomplete';
+import LoginScreen from './LoginSignUp/LoginScreen';
 
 const useStyles = makeStyles(() => ({
   grow: {
@@ -26,19 +27,26 @@ const useStyles = makeStyles(() => ({
 
 const Header = ({ data, childname }) => {
   const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
   const filterOptions = createFilterOptions({
     stringify: (option) => option,
     limit: 8,
   });
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
-    <div style={{ marginBottom: '70px' }}>
+    <div style={{ marginBottom: '6.25rem' }}>
       <AppBar position="fixed" color="inherit">
         <Toolbar>
           <Typography
             variant="h6"
             component={Link}
-            to="/"
+            to="/products?p=1"
             color="inherit"
             style={{ textDecoration: 'none' }}
           >
@@ -78,11 +86,13 @@ const Header = ({ data, childname }) => {
             aria-label="account of current user"
             aria-controls="menu-appbar"
             color="inherit"
+            onClick={handleClickOpen}
           >
             <AccountCircle style={{ fontSize: 36 }} />
           </IconButton>
         </Toolbar>
       </AppBar>
+      <LoginScreen open={open} handleClose={handleClose} />
     </div>
   );
 };

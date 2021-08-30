@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Dialog,
   Button,
   FormControl,
   InputLabel,
@@ -11,38 +10,9 @@ import {
   Grid,
 } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
-import { makeStyles } from '@material-ui/core/styles';
+import useStyles from './Auth.styles';
 
-const useStyles = makeStyles(() => ({
-  inputs: {
-    marginBottom: '15px',
-    color: 'red',
-  },
-  leftGrid: {
-    backgroundColor: '#2874f0',
-    padding: '40px 33px',
-    width: '204px',
-    height: '448px',
-    backgroundImage:
-      "url('https://static-assets-web.flixcart.com/www/linchpin/fk-cp-zion/img/login_img_c4a81e.png')",
-    backgroundPositionX: 'center',
-    backgroundPositionY: '85%',
-    backgroundRepeat: 'no-repeat',
-  },
-  rightGrid: {
-    backgroundColor: '#fff',
-    padding: '56px 35px 16px',
-  },
-  button: {
-    backgroundColor: '#fb641b',
-    boxShadow: '0 1px 2px 0 rgb(0 0 0 / 20%)',
-    color: '#fff',
-    height: '48px',
-    fontSize: '15px',
-  },
-}));
-
-const LoginScreen = ({ open, handleClose }) => {
+const LoginScreen = ({ handleScreen }) => {
   const classes = useStyles();
   const [visible, setVisible] = useState(false);
   const [email, setEmail] = useState('');
@@ -58,20 +28,15 @@ const LoginScreen = ({ open, handleClose }) => {
       )
     ) {
       setEmailError(true);
-    }
+    } else setEmailError(false);
     if (password === '') {
       setPasswordError(true);
-    }
+    } else setPasswordError(false);
   }
 
   return (
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="login-popup"
-      maxWidth="xl"
-    >
-      <Grid container>
+    <div>
+      <Grid container style={{ maxWidth: 675, maxHeight: 528 }}>
         <Grid item xs={4} className={classes.leftGrid}>
           <Typography variant="h5" color="textPrimary">
             Login
@@ -93,12 +58,15 @@ const LoginScreen = ({ open, handleClose }) => {
           }}
         >
           <FormControl autoFocus fullWidth margin="normal">
-            <InputLabel htmlFor="email-field">Enter Email</InputLabel>
+            <InputLabel htmlFor="email-field" className={classes.staticText}>
+              Enter Email
+            </InputLabel>
             <Input
               id="email-field"
               type="text"
               error={emailError}
               onChange={(e) => setEmail(e.target.value)}
+              className={classes.input}
             />
             {emailError && (
               <Typography variant="subtitle2" color="error" display="block">
@@ -107,7 +75,9 @@ const LoginScreen = ({ open, handleClose }) => {
             )}
           </FormControl>
           <FormControl fullWidth margin="normal" className={classes.inputs}>
-            <InputLabel htmlFor="password-field">Enter Password</InputLabel>
+            <InputLabel htmlFor="password-field" className={classes.staticText}>
+              Enter Password
+            </InputLabel>
             <Input
               id="password-field"
               type={visible ? 'text' : 'password'}
@@ -119,10 +89,15 @@ const LoginScreen = ({ open, handleClose }) => {
                     aria-label="toggle password visibility"
                     onClick={toggleVisbility}
                   >
-                    {visible ? <Visibility /> : <VisibilityOff />}
+                    {visible ? (
+                      <Visibility className={classes.staticText} />
+                    ) : (
+                      <VisibilityOff className={classes.staticText} />
+                    )}
                   </IconButton>
                 </InputAdornment>
               }
+              className={classes.input}
             />
             {passwordError && (
               <Typography variant="subtitle2" color="error" display="block">
@@ -130,6 +105,10 @@ const LoginScreen = ({ open, handleClose }) => {
               </Typography>
             )}
           </FormControl>
+          <Typography variant="caption" className={classes.staticText}>
+            By continuing, you agree to Flipkart&apos;s Terms of Use and Privacy
+            Policy.
+          </Typography>
           <Button
             autoFocus
             onClick={handleSubmit}
@@ -139,15 +118,25 @@ const LoginScreen = ({ open, handleClose }) => {
           >
             Login
           </Button>
-          <Typography variant="subtitle2" align="center">
+          <Typography
+            variant="subtitle2"
+            align="center"
+            className={classes.staticText}
+          >
             OR
           </Typography>
-          <Typography variant="subtitle2" align="center">
+          <Typography
+            variant="subtitle2"
+            align="center"
+            className={classes.staticText}
+            style={{ marginTop: '20px', cursor: 'pointer' }}
+            onClick={handleScreen}
+          >
             New To AncientNerd?
           </Typography>
         </Grid>
       </Grid>
-    </Dialog>
+    </div>
   );
 };
 

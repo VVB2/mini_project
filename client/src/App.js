@@ -6,15 +6,16 @@ import { createTheme, ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import axios from 'axios';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import ArtifactsCards from './components/LandingCards/ArtifactsCards';
+import ArtifactsCards from './components/Cards/ArtifactsCards';
 import Header from './components/Header';
+import LandingPage from './components/LandingPage/LandingPage';
+import DepartmentWise from './components/DepartmentWise/DepartmentWiseProducts';
 
 function App() {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const [name, setName] = useState([]);
   const [search, setSearch] = useState('');
   const pageLoaded = useRef(false);
-  // const [isloading, setIsloading] = useState(true);
 
   const theme = React.useMemo(
     () =>
@@ -33,8 +34,6 @@ function App() {
       axios.get('http://localhost:5000/api/products/names').then((res) => {
         setName(res.data.data);
       });
-
-      // serach data
     };
     fetchData();
     return pageLoaded;
@@ -66,8 +65,18 @@ function App() {
             <Header data={name} childname={childname} />
             <Route
               exact
+              path="/"
+              component={(props) => <LandingPage {...props} />}
+            />
+            <Route
+              exact
               path="/products"
               component={(props) => <ArtifactsCards {...props} />}
+            />
+            <Route
+              exact
+              path="/department"
+              component={(props) => <DepartmentWise {...props} />}
             />
           </Container>
         </ThemeProvider>

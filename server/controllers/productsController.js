@@ -1,10 +1,11 @@
+const ArtifactsModel = require('../models/Artifacts.model');
 const artifactModel = require('../models/Artifacts.model');
 
 exports.getAllProducts = async (req, res, next) => {
-    const { from, to } = req.query;
+    const { page } = req.query;
     try {
         const artifacts = await artifactModel.find({
-            id: { $gte: from, $lte: to },
+            id: { $gte: page * 10 - 9, $lte: page * 10 },
         });
         res.send({
             status: 400,
@@ -14,6 +15,60 @@ exports.getAllProducts = async (req, res, next) => {
         res.send({
             status: 401,
             data: error,
+        });
+    }
+};
+
+exports.getLandingProducts = async (req, res, next) => {
+    try {
+        const departments = await artifactModel.find().distinct('department');
+        const price = await artifactModel.aggregate([
+            {
+                $group: {
+                    _id: '$department',
+                    minPrice: { $min: '$price' },
+                },
+            },
+            { $sort: { department: 1 } },
+            { $limit: 12 },
+        ]);
+        const artifacts = [];
+        for (const index in departments) {
+            if (artifacts.length < 11) {
+                const department = departments[index];
+                artifacts.push(
+                    await artifactModel.aggregate([
+                        { $match: { department } },
+                        { $limit: 1 },
+                    ])
+                );
+            }
+        }
+        res.send({
+            status: 400,
+            data: artifacts,
+            price,
+        });
+    } catch (error) {
+        res.send({
+            status: 401,
+            data: error,
+        });
+    }
+};
+
+exports.getAllproductsByDepartment = async (req, res, next) => {
+    const { dept } = req.query;
+    try {
+        const artifacts = await ArtifactsModel.find({ department: dept });
+        res.send({
+            status: 400,
+            products: artifacts,
+        });
+    } catch (error) {
+        res.send({
+            status: 401,
+            error,
         });
     }
 };
@@ -33,21 +88,50 @@ exports.getAllProductsNames = async (req, res, next) => {
     });
 };
 
-exports.getProductsById = async (req, res, next) => {
+exports.getProductsByTitle = async (req, res, next) => {
     try {
         const { title } = req.params;
         const artifacts = await artifactModel.find({ title });
-        const { department, _id } = artifacts[0];
+        const { department } = artifacts[0];
         try {
             const similarArtifacts = await artifactModel.aggregate([
                 { $match: { department } },
+                { $limit: 5 },
             ]);
             res.send({
                 status: 400,
                 data: { artifacts, similarArtifacts },
             });
         } catch (error) {
-            console.log(error);
+            res.send({
+                status: 401,
+                error,
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        res.send({
+            status: 401,
+            error,
+        });
+    }
+};
+
+exports.getProductsById = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const artifacts = await artifactModel.find({ _id: id });
+        const { department } = artifacts[0];
+        try {
+            const similarArtifacts = await artifactModel.aggregate([
+                { $match: { department } },
+                { $limit: 5 },
+            ]);
+            res.send({
+                status: 400,
+                data: { artifacts, similarArtifacts },
+            });
+        } catch (error) {
             res.send({
                 status: 401,
                 error,

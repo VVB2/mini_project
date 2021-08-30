@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   AppBar,
@@ -7,12 +7,13 @@ import {
   Toolbar,
   Badge,
   TextField,
+  Button,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Autocomplete } from '@material-ui/lab';
-import { AccountCircle, ShoppingCart } from '@material-ui/icons';
+import { ShoppingCart } from '@material-ui/icons';
 import { createFilterOptions } from '@material-ui/lab/Autocomplete';
-import LoginScreen from './LoginSignUp/LoginScreen';
+import DialogueScreen from './LoginSignUp/DialogueScreen';
 
 const useStyles = makeStyles(() => ({
   grow: {
@@ -27,7 +28,7 @@ const useStyles = makeStyles(() => ({
 
 const Header = ({ data, childname }) => {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const filterOptions = createFilterOptions({
     stringify: (option) => option,
     limit: 8,
@@ -46,7 +47,7 @@ const Header = ({ data, childname }) => {
           <Typography
             variant="h6"
             component={Link}
-            to="/products?p=1"
+            to="/"
             color="inherit"
             style={{ textDecoration: 'none' }}
           >
@@ -82,17 +83,12 @@ const Header = ({ data, childname }) => {
               <ShoppingCart style={{ fontSize: 36 }} />
             </Badge>
           </IconButton>
-          <IconButton
-            aria-label="account of current user"
-            aria-controls="menu-appbar"
-            color="inherit"
-            onClick={handleClickOpen}
-          >
-            <AccountCircle style={{ fontSize: 36 }} />
-          </IconButton>
+          <Button variant="contained" onClick={handleClickOpen}>
+            Login/Signup
+          </Button>
         </Toolbar>
       </AppBar>
-      <LoginScreen open={open} handleClose={handleClose} />
+      <DialogueScreen open={open} handleClose={handleClose} />
     </div>
   );
 };

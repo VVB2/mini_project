@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import ArtifactsCard from '../Cards/ArtifactsCard';
 import Loading from '../Loading/Loading';
 
@@ -34,7 +34,6 @@ const DepartmentWiseProducts = ({ location }) => {
           <ArtifactsCard data={data[item]} />
         </div>
       ))}
-      ;
     </div>
   );
 };

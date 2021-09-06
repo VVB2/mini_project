@@ -2,6 +2,8 @@ import React from 'react';
 import { Card, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 const useStyles = makeStyles(() => ({
   image: {
@@ -27,7 +29,14 @@ const LandingCards = ({ data, price }) => {
           padding: '15px',
         }}
       >
-        <img src={data.coverImage} alt={data.title} className={classes.image} />
+        <LazyLoadImage
+          src={data.coverImage}
+          alt={data.title}
+          className={classes.image}
+          effect="blur"
+          width="100%"
+          height="250px"
+        />
         <Typography
           color="textPrimary"
           variant="subtitle2"

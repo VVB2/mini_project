@@ -14,12 +14,9 @@ router.route('/names').get(productsController.getAllProductsNames);
 //@route - /api/products/department
 router.route('/department').get(productsController.getAllproductsByDepartment);
 
-//@route - /api/products/product/name
+//@route - /api/products/productByName/name
 router
     .route('/productByName/:title')
     .get(productsController.getProductsByTitle);
-
-//@route - /api/products/product/id
-router.route('/productById/:id').get(productsController.getProductsById);
 
 module.exports = router;

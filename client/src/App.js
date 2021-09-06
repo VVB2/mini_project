@@ -10,6 +10,7 @@ import ArtifactsCards from './components/Cards/ArtifactsCards';
 import Header from './components/Header';
 import LandingPage from './components/LandingPage/LandingPage';
 import DepartmentWise from './components/DepartmentWise/DepartmentWiseProducts';
+import ProductPage from './components/ProductPage/ProductPage';
 
 function App() {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
@@ -30,7 +31,7 @@ function App() {
   useEffect(() => {
     pageLoaded.current = true;
     const fetchData = () => {
-      // get all names for textfield
+      // search all the names for autocoplete text field
       axios.get('http://localhost:5000/api/products/names').then((res) => {
         setName(res.data.data);
       });
@@ -43,7 +44,7 @@ function App() {
     const fetchData = () => {
       if (search !== '') {
         axios
-          .get(`http://localhost:5000/api/products/product/${search}`)
+          .get(`http://localhost:5000/api/products/productByName/${search}`)
           .then((res) => {
             console.log(res.data.data);
           });
@@ -63,21 +64,10 @@ function App() {
           <CssBaseline />
           <Container>
             <Header data={name} childname={childname} />
-            <Route
-              exact
-              path="/"
-              component={(props) => <LandingPage {...props} />}
-            />
-            <Route
-              exact
-              path="/products"
-              component={(props) => <ArtifactsCards {...props} />}
-            />
-            <Route
-              exact
-              path="/department"
-              component={(props) => <DepartmentWise {...props} />}
-            />
+            <Route exact path="/" component={LandingPage} />
+            <Route exact path="/products" component={ArtifactsCards} />
+            <Route exact path="/department" component={DepartmentWise} />
+            <Route path="/product/:name" component={ProductPage} />
           </Container>
         </ThemeProvider>
       </Router>

@@ -1,6 +1,7 @@
 const ArtifactsModel = require('../models/Artifacts.model');
 const artifactModel = require('../models/Artifacts.model');
 
+// for pagination
 exports.getAllProducts = async (req, res, next) => {
     const { page } = req.query;
     try {
@@ -19,6 +20,7 @@ exports.getAllProducts = async (req, res, next) => {
     }
 };
 
+// show department wise products
 exports.getLandingProducts = async (req, res, next) => {
     try {
         const departments = await artifactModel.find().distinct('department');
@@ -57,6 +59,7 @@ exports.getLandingProducts = async (req, res, next) => {
     }
 };
 
+// all products department wise
 exports.getAllproductsByDepartment = async (req, res, next) => {
     const { dept } = req.query;
     try {
@@ -73,6 +76,7 @@ exports.getAllproductsByDepartment = async (req, res, next) => {
     }
 };
 
+// get all product names for autocomplete
 exports.getAllProductsNames = async (req, res, next) => {
     const artifacts = await artifactModel.find();
     const products = [];
@@ -88,6 +92,7 @@ exports.getAllProductsNames = async (req, res, next) => {
     });
 };
 
+// get single product by name and similar products
 exports.getProductsByTitle = async (req, res, next) => {
     try {
         const { title } = req.params;
@@ -96,40 +101,11 @@ exports.getProductsByTitle = async (req, res, next) => {
         try {
             const similarArtifacts = await artifactModel.aggregate([
                 { $match: { department } },
-                { $limit: 5 },
             ]);
             res.send({
                 status: 400,
-                data: { artifacts, similarArtifacts },
-            });
-        } catch (error) {
-            res.send({
-                status: 401,
-                error,
-            });
-        }
-    } catch (error) {
-        console.log(error);
-        res.send({
-            status: 401,
-            error,
-        });
-    }
-};
-
-exports.getProductsById = async (req, res, next) => {
-    try {
-        const { id } = req.params;
-        const artifacts = await artifactModel.find({ _id: id });
-        const { department } = artifacts[0];
-        try {
-            const similarArtifacts = await artifactModel.aggregate([
-                { $match: { department } },
-                { $limit: 5 },
-            ]);
-            res.send({
-                status: 400,
-                data: { artifacts, similarArtifacts },
+                productDetails: artifacts,
+                similarProducts: similarArtifacts,
             });
         } catch (error) {
             res.send({

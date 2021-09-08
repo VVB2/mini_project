@@ -5,6 +5,9 @@ import { ShoppingCart, FlashOn } from '@material-ui/icons';
 import { GlassMagnifier } from 'react-image-magnifiers';
 import { Link } from 'react-router-dom';
 import Carousel from 'react-multi-carousel';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import Loading from './ProductPage.loading';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 import 'react-multi-carousel/lib/styles.css';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -14,22 +17,26 @@ const ProductPage = ({ location }) => {
   const [product, setProduct] = useState([]);
   const images = [];
   const [similarProducts, setSimilarProducts] = useState([]);
+  const [suggestedProducts, setSuggestedProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const title = location.pathname.substring(9);
-  let filteredSimilarProducts = [];
+  const filteredSimilar = [];
+  const filteredSuggested = [];
 
   useEffect(() => {
     const fetchData = () => {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth',
+      });
       setIsLoading(true);
       axios
         .get(`http://localhost:5000/api/products/productByName/${title}`)
         .then((res) => {
           setProduct(res.data.productDetails);
           setSimilarProducts(res.data.similarProducts);
+          setSuggestedProducts(res.data.suggestedProducts);
           setIsLoading(false);
-          filteredSimilarProducts = similarProducts.filter(
-            (el) => el.title !== title
-          );
         });
     };
     fetchData();
@@ -39,10 +46,20 @@ const ProductPage = ({ location }) => {
       images.push(product[0].additionalImages[i]);
     }
   }
-  console.log(similarProducts);
-
+  if (Object.keys(similarProducts).length !== 0) {
+    for (const i in similarProducts) {
+      if (similarProducts[i].title !== title)
+        filteredSimilar.push(similarProducts[i]);
+    }
+  }
+  if (Object.keys(suggestedProducts).length !== 0) {
+    for (const i in suggestedProducts) {
+      if (suggestedProducts[i].title !== title)
+        filteredSuggested.push(suggestedProducts[i]);
+    }
+  }
   return isLoading ? (
-    <div>Loading</div>
+    <Loading />
   ) : (
     <div>
       <Card style={{ marginBottom: 20 }}>
@@ -152,6 +169,7 @@ const ProductPage = ({ location }) => {
                 <img
                   src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMyIgaGVpZ2h0PSIxMiI+PHBhdGggZmlsbD0iI0ZGRiIgZD0iTTYuNSA5LjQzOWwtMy42NzQgMi4yMy45NC00LjI2LTMuMjEtMi44ODMgNC4yNTQtLjQwNEw2LjUuMTEybDEuNjkgNC4wMSA0LjI1NC40MDQtMy4yMSAyLjg4Mi45NCA0LjI2eiIvPjwvc3ZnPg=="
                   alt="star icon"
+                  effect="blur"
                 />
               </Typography>
               <Typography
@@ -310,9 +328,9 @@ const ProductPage = ({ location }) => {
           }}
           draggable={false}
         >
-          {Object.keys(filteredSimilarProducts).map((item, i) => (
+          {Object.keys(filteredSimilar).map((item, i) => (
             <Link
-              to={`/product/${filteredSimilarProducts[item].title}`}
+              to={`/product/${filteredSimilar[item].title}`}
               style={{ textDecoration: 'none' }}
               key={i}
             >
@@ -324,17 +342,15 @@ const ProductPage = ({ location }) => {
                 }}
                 raised
               >
-                <img
-                  src={filteredSimilarProducts[item].coverImage}
-                  alt={filteredSimilarProducts[item].title}
+                <LazyLoadImage
+                  src={filteredSimilar[item].coverImage}
+                  alt={filteredSimilar[item].title}
                   width="250px"
                   height="180px"
+                  effect="blur"
                 />
                 <Typography variant="body1">
-                  {filteredSimilarProducts[item].title.replace(
-                    /(.{50})..+/,
-                    '$1…'
-                  )}
+                  {filteredSimilar[item].title.replace(/(.{20})..+/, '$1…')}
                 </Typography>
                 <Typography
                   variant="body1"
@@ -347,7 +363,7 @@ const ProductPage = ({ location }) => {
                     fontWeight: 'bold',
                   }}
                 >
-                  {filteredSimilarProducts[item].rating}.0{' '}
+                  {filteredSimilar[item].rating}.0{' '}
                   <img
                     src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMyIgaGVpZ2h0PSIxMiI+PHBhdGggZmlsbD0iI0ZGRiIgZD0iTTYuNSA5LjQzOWwtMy42NzQgMi4yMy45NC00LjI2LTMuMjEtMi44ODMgNC4yNTQtLjQwNEw2LjUuMTEybDEuNjkgNC4wMSA0LjI1NC40MDQtMy4yMSAyLjg4Mi45NCA0LjI2eiIvPjwvc3ZnPg=="
                     alt="star icon"
@@ -360,7 +376,94 @@ const ProductPage = ({ location }) => {
                 >
                   ₹
                   {new Intl.NumberFormat('en-IN').format(
-                    filteredSimilarProducts[item].price
+                    filteredSimilar[item].price
+                  )}
+                </Typography>
+              </Card>
+            </Link>
+          ))}
+        </Carousel>
+      </Card>
+      <Card style={{ paddingTop: 24, marginBottom: 20 }}>
+        <Typography variant="h5" style={{ paddingLeft: 20 }}>
+          You might be interested in
+        </Typography>
+        <Carousel
+          slidesToSlide={2}
+          responsive={{
+            desktop: {
+              breakpoint: {
+                max: 3000,
+                min: 1024,
+              },
+              items: 4,
+            },
+            mobile: {
+              breakpoint: {
+                max: 464,
+                min: 0,
+              },
+              items: 1,
+            },
+            tablet: {
+              breakpoint: {
+                max: 1024,
+                min: 464,
+              },
+              items: 2,
+            },
+          }}
+          draggable={false}
+        >
+          {Object.keys(filteredSuggested).map((item, i) => (
+            <Link
+              to={`/product/${filteredSuggested[item].title}`}
+              style={{ textDecoration: 'none' }}
+              key={i}
+            >
+              <Card
+                style={{
+                  padding: '16px 16px 10px 16px',
+                  margin: '20px 15px',
+                  height: 320,
+                }}
+                raised
+              >
+                <LazyLoadImage
+                  src={filteredSuggested[item].coverImage}
+                  alt={filteredSuggested[item].title}
+                  width="250px"
+                  height="180px"
+                  effect="blur"
+                />
+                <Typography variant="body1">
+                  {filteredSuggested[item].title.replace(/(.{30})..+/, '$1…')}
+                </Typography>
+                <Typography
+                  variant="body1"
+                  gutterBottom
+                  style={{
+                    backgroundColor: '#26a541',
+                    padding: '2px',
+                    borderRadius: 3,
+                    width: 45,
+                    fontWeight: 'bold',
+                  }}
+                >
+                  {filteredSuggested[item].rating}.0{' '}
+                  <img
+                    src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMyIgaGVpZ2h0PSIxMiI+PHBhdGggZmlsbD0iI0ZGRiIgZD0iTTYuNSA5LjQzOWwtMy42NzQgMi4yMy45NC00LjI2LTMuMjEtMi44ODMgNC4yNTQtLjQwNEw2LjUuMTEybDEuNjkgNC4wMSA0LjI1NC40MDQtMy4yMSAyLjg4Mi45NCA0LjI2eiIvPjwvc3ZnPg=="
+                    alt="star icon"
+                  />
+                </Typography>
+                <Typography
+                  variant="body1"
+                  gutterBottom
+                  style={{ marginBottom: 20 }}
+                >
+                  ₹
+                  {new Intl.NumberFormat('en-IN').format(
+                    filteredSuggested[item].price
                   )}
                 </Typography>
               </Card>

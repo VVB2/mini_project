@@ -102,10 +102,14 @@ exports.getProductsByTitle = async (req, res, next) => {
             const similarArtifacts = await artifactModel.aggregate([
                 { $match: { department } },
             ]);
+            const suggestedArtifacts = await artifactModel.aggregate([
+                { $sample: { size: 10 } },
+            ]);
             res.send({
                 status: 400,
                 productDetails: artifacts,
                 similarProducts: similarArtifacts,
+                suggestedProducts: suggestedArtifacts,
             });
         } catch (error) {
             res.send({

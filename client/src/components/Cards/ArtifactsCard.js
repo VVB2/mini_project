@@ -22,8 +22,17 @@ function ArtifactsCard({ data }) {
             />
           </Grid>
           <Grid item xs={9}>
-            <Typography color="textPrimary" variant="h5" gutterBottom>
-              {data.title.replace(/(.{50})..+/, '$1…')}
+            <Typography
+              color="textPrimary"
+              variant="h5"
+              gutterBottom
+              style={{
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}
+            >
+              {data.title}
             </Typography>
             <Rating name="size-medium" value={data.rating} readOnly />
             <Typography color="error" variant="h6" gutterBottom>

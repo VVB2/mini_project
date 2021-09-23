@@ -8,8 +8,7 @@ const useStyles = makeStyles(() => ({
   leftGrid: {
     backgroundColor: '#2874f0',
     padding: '40px 33px',
-    width: '204px',
-    maxHeight: '489px',
+    width: '240px',
     backgroundImage:
       "url('https://static-assets-web.flixcart.com/www/linchpin/fk-cp-zion/img/login_img_c4a81e.png')",
     backgroundPositionX: 'center',
@@ -18,7 +17,8 @@ const useStyles = makeStyles(() => ({
   },
   rightGrid: {
     backgroundColor: '#fff',
-    padding: '56px 35px 16px',
+    padding: '56px 35px 16px 35px',
+    width: '434px',
   },
   button: {
     '&:hover': {

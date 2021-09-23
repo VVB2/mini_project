@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+// import axios from 'axios';
 import {
   Button,
   FormControl,
@@ -8,11 +10,12 @@ import {
   InputAdornment,
   Typography,
   Grid,
+  Container,
 } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import useStyles from './Auth.styles';
 
-const LoginScreen = ({ handleScreen }) => {
+const LoginScreen = () => {
   const classes = useStyles();
   const [visible, setVisible] = useState(false);
   const [email, setEmail] = useState('');
@@ -35,8 +38,8 @@ const LoginScreen = ({ handleScreen }) => {
   }
 
   return (
-    <div>
-      <Grid container style={{ maxWidth: 675, maxHeight: 528 }}>
+    <Container style={{ margin: 'auto auto auto 10%' }}>
+      <Grid container style={{ maxWidth: 840, textAlign: 'center' }}>
         <Grid item xs={4} className={classes.leftGrid}>
           <Typography variant="h5" color="textPrimary">
             Login
@@ -122,6 +125,7 @@ const LoginScreen = ({ handleScreen }) => {
             variant="subtitle2"
             align="center"
             className={classes.staticText}
+            style={{ marginTop: '25px', marginBottom: '40px' }}
           >
             OR
           </Typography>
@@ -129,14 +133,19 @@ const LoginScreen = ({ handleScreen }) => {
             variant="subtitle2"
             align="center"
             className={classes.staticText}
-            style={{ marginTop: '20px', cursor: 'pointer' }}
-            onClick={handleScreen}
+            style={{
+              marginTop: '50px',
+              cursor: 'pointer',
+              textDecoration: 'none',
+            }}
+            component={Link}
+            to="/signup"
           >
             New To AncientNerd?
           </Typography>
         </Grid>
       </Grid>
-    </div>
+    </Container>
   );
 };
 

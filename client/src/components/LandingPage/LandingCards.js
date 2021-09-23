@@ -12,7 +12,7 @@ const useStyles = makeStyles(() => ({
     },
     width: '100%',
     height: '250px',
-    transition: 'transform .2s',
+    transition: 'transform 1s',
   },
 }));
 
@@ -42,6 +42,11 @@ const LandingCards = ({ data, price }) => {
           variant="subtitle2"
           gutterBottom
           align="center"
+          style={{
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}
         >
           {data.department}
         </Typography>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   AppBar,
@@ -13,7 +13,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Autocomplete } from '@material-ui/lab';
 import { ShoppingCart } from '@material-ui/icons';
 import { createFilterOptions } from '@material-ui/lab/Autocomplete';
-import DialogueScreen from './LoginSignUp/DialogueScreen';
 
 const useStyles = makeStyles(() => ({
   grow: {
@@ -26,19 +25,21 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Header = ({ data, childname }) => {
+const Header = ({ data }) => {
   const classes = useStyles();
-  const [open, setOpen] = useState(false);
+  const name = window.location.pathname;
+  const [productName, setProductName] = useState('');
   const filterOptions = createFilterOptions({
     stringify: (option) => option,
     limit: 8,
   });
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-  const handleClose = () => {
-    setOpen(false);
-  };
+  useEffect(() => {
+    if (name.includes('/product/')) {
+      setProductName(decodeURIComponent(name.substring(9)));
+    } else {
+      setProductName('');
+    }
+  }, [productName]);
 
   return (
     <div style={{ marginBottom: '6.25rem' }}>
@@ -53,6 +54,7 @@ const Header = ({ data, childname }) => {
           >
             Artifacts Shop
           </Typography>
+
           <Autocomplete
             className={classes.grow}
             options={data.map((option) => option.name)}
@@ -68,8 +70,9 @@ const Header = ({ data, childname }) => {
               />
             )}
             onChange={(event, value) => {
-              if (value !== null) childname(value);
+              if (value !== null) window.location = `/product/${value}`;
             }}
+            value={productName}
           />
           <IconButton
             aria-label="cart of current user"
@@ -83,12 +86,16 @@ const Header = ({ data, childname }) => {
               <ShoppingCart style={{ fontSize: 36 }} />
             </Badge>
           </IconButton>
-          <Button variant="contained" onClick={handleClickOpen}>
-            Login/Signup
+          <Button
+            variant="contained"
+            component={Link}
+            to="/login"
+            style={{ textDecoration: 'none' }}
+          >
+            Login
           </Button>
         </Toolbar>
       </AppBar>
-      <DialogueScreen open={open} handleClose={handleClose} />
     </div>
   );
 };

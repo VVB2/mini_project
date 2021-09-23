@@ -11,11 +11,12 @@ import Header from './components/Header';
 import LandingPage from './components/LandingPage/LandingPage';
 import DepartmentWise from './components/DepartmentWise/DepartmentWiseProducts';
 import ProductPage from './components/ProductPage/ProductPage';
+import SignupScreen from './components/LoginSignUp/SignupScreen';
+import LoginScreen from './components/LoginSignUp/LoginScreen';
 
 function App() {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const [name, setName] = useState([]);
-  const [search, setSearch] = useState('');
   const pageLoaded = useRef(false);
 
   const theme = React.useMemo(
@@ -40,33 +41,18 @@ function App() {
     return pageLoaded;
   }, []);
 
-  useEffect(() => {
-    const fetchData = () => {
-      if (search !== '') {
-        axios
-          .get(`http://localhost:5000/api/products/productByName/${search}`)
-          .then((res) => {
-            console.log(res.data.data);
-          });
-      }
-    };
-    fetchData();
-  }, [search]);
-
-  const childname = (returnedName) => {
-    setSearch(returnedName);
-  };
-
   return (
     pageLoaded.current && (
       <Router>
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Container>
-            <Header data={name} childname={childname} />
+            <Header data={name} />
             <Route exact path="/" component={LandingPage} />
             <Route exact path="/products" component={ArtifactsCards} />
             <Route exact path="/department" component={DepartmentWise} />
+            <Route exact path="/login" component={LoginScreen} />
+            <Route exact path="/signup" component={SignupScreen} />
             <Route path="/product/:name" component={ProductPage} />
           </Container>
         </ThemeProvider>

@@ -1,5 +1,7 @@
 const userModel = require('../models/User.model');
 const ErrorResponse = require('../utils/errorResponse');
+const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
 
 exports.register = async (req, res, next) => {
     const { username, email, password } = req.body;
@@ -40,15 +42,18 @@ exports.login = async (req, res, next) => {
     }
 };
 
-exports.forgotpassword = async (req, res, next) => {
-    res.send('Forgot password route');
-};
-
-exports.resetpassword = async (req, res, next) => {
-    res.send('Reset password route');
-};
-
 const sendToken = (user, statusCode, res) => {
     const token = user.getSignedToken();
     res.status(statusCode).json({ success: true, token });
+};
+
+exports.userDetails = async (req, res, next) => {
+    const { jwtEncodedUser } = req.body;
+    const { id } = jwt.decode(jwtEncodedUser);
+    try {
+        const user = await userModel.findById(id);
+        res.status(201).json({ success: true, user });
+    } catch (error) {
+        next(error);
+    }
 };

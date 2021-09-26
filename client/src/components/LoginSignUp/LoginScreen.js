@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-// import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+import axios from 'axios';
 import {
   Button,
   FormControl,
@@ -16,26 +16,47 @@ import { Visibility, VisibilityOff } from '@material-ui/icons';
 import useStyles from './Auth.styles';
 
 const LoginScreen = () => {
+  const history = useHistory();
   const classes = useStyles();
   const [visible, setVisible] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
+  const [loginStatus, setLoginStatus] = useState('');
   const toggleVisbility = () => setVisible((value) => !value);
-  function handleSubmit() {
+  useEffect(() => {
+    if (localStorage.getItem('authToken')) history.goBack();
+  }, [history]);
+  const handleSubmit = async () => {
+    const config = {
+      header: {
+        'Content-Type': 'application/json',
+      },
+    };
     if (
       email === '' ||
-      email.match(
+      !email.match(
         /^[a-z0-9][a-z0-9-_.]+@([a-z]|[a-z0-9]?[a-z0-9-]+[a-z0-9])\.[a-z0-9]{2,10}(?:\.[a-z]{2,10})?$/
       )
     ) {
       setEmailError(true);
-    } else setEmailError(false);
-    if (password === '') {
+    } else if (password === '') {
       setPasswordError(true);
-    } else setPasswordError(false);
-  }
+    } else {
+      try {
+        const { data } = await axios.post(
+          'http://localhost:5000/api/auth/login',
+          { email, password },
+          config
+        );
+        localStorage.setItem('authToken', data.token);
+        history.goBack();
+      } catch (error) {
+        setLoginStatus(error.response.data.error);
+      }
+    }
+  };
 
   return (
     <Container style={{ margin: 'auto auto auto 10%' }}>
@@ -72,7 +93,12 @@ const LoginScreen = () => {
               className={classes.input}
             />
             {emailError && (
-              <Typography variant="subtitle2" color="error" display="block">
+              <Typography
+                variant="subtitle2"
+                color="error"
+                display="block"
+                align="left"
+              >
                 Please enter a valid Email ID
               </Typography>
             )}
@@ -103,14 +129,29 @@ const LoginScreen = () => {
               className={classes.input}
             />
             {passwordError && (
-              <Typography variant="subtitle2" color="error" display="block">
+              <Typography
+                variant="subtitle2"
+                color="error"
+                display="block"
+                align="left"
+              >
                 Please enter Password
               </Typography>
             )}
           </FormControl>
+          {loginStatus.length > 0 && (
+            <Typography
+              variant="subtitle2"
+              color="error"
+              display="block"
+              align="left"
+            >
+              {loginStatus}
+            </Typography>
+          )}
           <Typography variant="caption" className={classes.staticText}>
-            By continuing, you agree to Flipkart&apos;s Terms of Use and Privacy
-            Policy.
+            By continuing, you agree to Artifact Shop&apos;s Terms of Use and
+            Privacy Policy.
           </Typography>
           <Button
             autoFocus

@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import {
   AppBar,
   Typography,
@@ -8,6 +9,7 @@ import {
   Badge,
   TextField,
   Button,
+  Avatar,
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Autocomplete } from '@material-ui/lab';
@@ -26,20 +28,35 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Header = ({ data }) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState([]);
+  console.log(user);
+  useEffect(() => {
+    const config = {
+      header: {
+        'Content-Type': 'application/json',
+      },
+    };
+    const fetchData = async () => {
+      if (localStorage.getItem('authToken')) {
+        axios
+          .post(
+            'http://localhost:5000/api/auth/userDetails',
+            { jwtEncodedUser: localStorage.getItem('authToken') },
+            config
+          )
+          .then((res) => setUser(res.data.user));
+        setIsLoggedIn(true);
+      }
+    };
+    fetchData();
+  }, []);
+  console.log(isLoggedIn);
   const classes = useStyles();
-  const name = window.location.pathname;
-  const [productName, setProductName] = useState('');
   const filterOptions = createFilterOptions({
     stringify: (option) => option,
     limit: 8,
   });
-  useEffect(() => {
-    if (name.includes('/product/')) {
-      setProductName(decodeURIComponent(name.substring(9)));
-    } else {
-      setProductName('');
-    }
-  }, [productName]);
 
   return (
     <div style={{ marginBottom: '6.25rem' }}>
@@ -70,9 +87,11 @@ const Header = ({ data }) => {
               />
             )}
             onChange={(event, value) => {
-              if (value !== null) window.location = `/product/${value}`;
+              if (value !== null) {
+                window.open(`http://localhost:3000/product/${value}`, '_blank');
+                console.log(event);
+              }
             }}
-            value={productName}
           />
           <IconButton
             aria-label="cart of current user"
@@ -86,14 +105,30 @@ const Header = ({ data }) => {
               <ShoppingCart style={{ fontSize: 36 }} />
             </Badge>
           </IconButton>
-          <Button
-            variant="contained"
-            component={Link}
-            to="/login"
-            style={{ textDecoration: 'none' }}
-          >
-            Login
-          </Button>
+          {!isLoggedIn ? (
+            <Button
+              variant="contained"
+              component={Link}
+              to="/login"
+              style={{ textDecoration: 'none' }}
+            >
+              Login
+            </Button>
+          ) : (
+            <IconButton
+              aria-label="cart of current user"
+              aria-controls="menu-appbar"
+              color="inherit"
+              onClick={() => {
+                console.log('hii');
+              }}
+            >
+              <Avatar
+                alt={user.username}
+                src={`https://avatars.dicebear.com/api/human/${user.username}.svg`}
+              />
+            </IconButton>
+          )}
         </Toolbar>
       </AppBar>
     </div>

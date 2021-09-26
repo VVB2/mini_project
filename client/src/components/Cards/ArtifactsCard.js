@@ -7,9 +7,12 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 
 function ArtifactsCard({ data }) {
-  const days = Math.floor(Math.random() * 5) + 1;
   return (
-    <Link to={`/product/${data.title}`} style={{ textDecoration: 'none' }}>
+    <Link
+      to={`/product/${data.title}`}
+      style={{ textDecoration: 'none' }}
+      target="_blank"
+    >
       <Card style={{ marginBottom: '20px' }}>
         <Grid container>
           <Grid item xs={3}>
@@ -44,8 +47,8 @@ function ArtifactsCard({ data }) {
             <Typography color="textSecondary" variant="body2" gutterBottom>
               Get it by{' '}
               <b>
-                {moment().add(days, 'days').calendar().slice(0, -11)}{' '}
-                {moment().add(days, 'days').format('LL')}
+                {moment().add(data.rating, 'days').calendar().slice(0, -11)}{' '}
+                {moment().add(data.rating, 'days').format('LL')}
               </b>
             </Typography>
             <Typography color="textSecondary" variant="body2">

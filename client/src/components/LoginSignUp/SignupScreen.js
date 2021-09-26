@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-// import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import { Link, useHistory } from 'react-router-dom';
+import axios from 'axios';
 import {
   Button,
   FormControl,
@@ -17,6 +17,7 @@ import useStyles from './Auth.styles';
 
 const SignupScreen = () => {
   const classes = useStyles();
+  const history = useHistory();
   const [visible, setVisible] = useState(false);
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -26,24 +27,39 @@ const SignupScreen = () => {
   const [emailError, setEmailError] = useState(false);
   const [passwordError, setPasswordError] = useState(false);
   const [confirmPasswordError, setConfirmPasswordError] = useState(false);
+  const [signUpStatus, setSignUpStatus] = useState('');
   const toggleVisbility = () => setVisible((value) => !value);
-  function handleSubmit() {
+  useEffect(() => {
+    if (localStorage.getItem('authToken')) history.goBack();
+  }, [history]);
+  const handleSubmit = async () => {
+    const config = {
+      header: {
+        'Content-Type': 'application/json',
+      },
+    };
     if (username === '' || username.length < 3 || username.length > 15)
       setUsernameError(true);
     else setUsernameError(false);
-    if (
-      email === '' ||
-      email.match(
-        /^[a-z0-9][a-z0-9-_.]+@([a-z]|[a-z0-9]?[a-z0-9-]+[a-z0-9])\.[a-z0-9]{2,10}(?:\.[a-z]{2,10})?$/
-      )
-    )
+    if (email === '' || !email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/))
       setEmailError(true);
-    else setEmailError(false);
-    if (password === '') {
+    else if (password === '') {
       setPasswordError(true);
     } else if (password !== confirmPassword) setConfirmPasswordError(true);
-    else setConfirmPasswordError(false);
-  }
+    else {
+      try {
+        const { data } = await axios.post(
+          'http://localhost:5000/api/auth/register',
+          { username, email, password },
+          config
+        );
+        localStorage.setItem('authToken', data.token);
+        history.goBack();
+      } catch (error) {
+        setSignUpStatus(error.response.data.error);
+      }
+    }
+  };
 
   return (
     <Container style={{ margin: 'auto auto auto 10%' }}>
@@ -135,11 +151,14 @@ const SignupScreen = () => {
             )}
           </FormControl>
           <FormControl fullWidth margin="normal" className={classes.inputs}>
-            <InputLabel htmlFor="password-field" className={classes.staticText}>
+            <InputLabel
+              htmlFor="confirm-password-field"
+              className={classes.staticText}
+            >
               Confirm Password
             </InputLabel>
             <Input
-              id="password-field"
+              id="confirm-password-field"
               type={visible ? 'text' : 'password'}
               onChange={(e) => setConfirmPassword(e.target.value)}
               error={passwordError}
@@ -165,9 +184,19 @@ const SignupScreen = () => {
               </Typography>
             )}
           </FormControl>
+          {signUpStatus.length > 0 && (
+            <Typography
+              variant="subtitle2"
+              color="error"
+              display="block"
+              align="left"
+            >
+              {signUpStatus}
+            </Typography>
+          )}
           <Typography variant="caption" className={classes.staticText}>
-            By continuing, you agree to Flipkart&apos;s Terms of Use and Privacy
-            Policy.
+            By continuing, you agree to Artifact Shop&apos;s Terms of Use and
+            Privacy Policy.
           </Typography>
           <Button
             autoFocus

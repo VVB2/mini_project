@@ -13,6 +13,8 @@ import DepartmentWise from './components/DepartmentWise/DepartmentWiseProducts';
 import ProductPage from './components/ProductPage/ProductPage';
 import SignupScreen from './components/LoginSignUp/SignupScreen';
 import LoginScreen from './components/LoginSignUp/LoginScreen';
+import PrivateRoute from './PrivateRoute';
+import Profile from './components/Profile/Profile';
 
 function App() {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
@@ -48,6 +50,7 @@ function App() {
           <CssBaseline />
           <Container>
             <Header data={name} />
+            <PrivateRoute exact path="/profile" component={Profile} />
             <Route exact path="/" component={LandingPage} />
             <Route exact path="/products" component={ArtifactsCards} />
             <Route exact path="/department" component={DepartmentWise} />

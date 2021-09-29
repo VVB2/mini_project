@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import {
   AppBar,
   Typography,
@@ -27,31 +26,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Header = ({ data }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [user, setUser] = useState([]);
-  console.log(user);
-  useEffect(() => {
-    const config = {
-      header: {
-        'Content-Type': 'application/json',
-      },
-    };
-    const fetchData = async () => {
-      if (localStorage.getItem('authToken')) {
-        axios
-          .post(
-            'http://localhost:5000/api/auth/userDetails',
-            { jwtEncodedUser: localStorage.getItem('authToken') },
-            config
-          )
-          .then((res) => setUser(res.data.user));
-        setIsLoggedIn(true);
-      }
-    };
-    fetchData();
-  }, []);
-  console.log(isLoggedIn);
+const Header = ({ data, isLoggedIn, user, sprites }) => {
   const classes = useStyles();
   const filterOptions = createFilterOptions({
     stringify: (option) => option,
@@ -119,13 +94,13 @@ const Header = ({ data }) => {
               aria-label="cart of current user"
               aria-controls="menu-appbar"
               color="inherit"
-              onClick={() => {
-                console.log('hii');
-              }}
+              component={Link}
+              to="/profile"
+              style={{ textDecoration: 'none' }}
             >
               <Avatar
                 alt={user.username}
-                src={`https://avatars.dicebear.com/api/human/${user.username}.svg`}
+                src={`https://avatars.dicebear.com/api/${sprites}/${user.username}.svg`}
               />
             </IconButton>
           )}

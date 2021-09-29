@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useEffect, useState, useRef } from 'react';
 import { Container } from '@material-ui/core';
@@ -15,8 +16,12 @@ import SignupScreen from './components/LoginSignUp/SignupScreen';
 import LoginScreen from './components/LoginSignUp/LoginScreen';
 import PrivateRoute from './PrivateRoute';
 import Profile from './components/Profile/Profile';
+import ProfileSettings from './components/Profile/ProfileSettings';
 
 function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [sprites, setSprites] = useState('identicon');
+  const [user, setUser] = useState([]);
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const [name, setName] = useState([]);
   const pageLoaded = useRef(false);
@@ -43,14 +48,51 @@ function App() {
     return pageLoaded;
   }, []);
 
+  useEffect(() => {
+    const config = {
+      header: {
+        'Content-Type': 'application/json',
+      },
+    };
+    if (localStorage.getItem('spriteType')) {
+      setSprites(localStorage.getItem('spriteType'));
+    }
+    if (localStorage.getItem('authToken')) {
+      axios
+        .post(
+          'http://localhost:5000/api/auth/userDetails',
+          { jwtEncodedUser: localStorage.getItem('authToken') },
+          config
+        )
+        .then((res) => setUser(res.data.user));
+      setIsLoggedIn(true);
+    }
+  }, []);
+
   return (
     pageLoaded.current && (
       <Router>
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Container>
-            <Header data={name} />
-            <PrivateRoute exact path="/profile" component={Profile} />
+            <Header
+              data={name}
+              isLoggedIn={isLoggedIn}
+              user={user}
+              sprites={sprites}
+            />
+            <PrivateRoute
+              exact
+              path="/profile"
+              component={() => <Profile user={user} sprites={sprites} />}
+              user={user}
+            />
+            <PrivateRoute
+              exact
+              path="/profile/settings"
+              component={() => <ProfileSettings user={user} />}
+              user={user}
+            />
             <Route exact path="/" component={LandingPage} />
             <Route exact path="/products" component={ArtifactsCards} />
             <Route exact path="/department" component={DepartmentWise} />

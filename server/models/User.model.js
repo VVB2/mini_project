@@ -33,6 +33,10 @@ const userSchema = mongoose.Schema({
         type: Date,
         default: Date.now,
     },
+    profilePicture: {
+        type: String,
+        default: 'identicons',
+    },
 });
 
 userSchema.pre('save', async function (next) {

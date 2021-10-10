@@ -51,7 +51,7 @@ const LoginScreen = () => {
           config
         );
         localStorage.setItem('authToken', data.token);
-        window.location.href = 'http://localhost:3000';
+        window.history.go(-1);
       } catch (error) {
         setLoginStatus(error.response.data.error);
       }

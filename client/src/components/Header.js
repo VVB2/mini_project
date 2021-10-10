@@ -1,5 +1,8 @@
-import React from 'react';
+/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable no-underscore-dangle */
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import {
   AppBar,
   Typography,
@@ -27,12 +30,22 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Header = ({ data, isLoggedIn, user, sprites }) => {
+  const title = window.location.href.substring(30);
+  const [cartItemsNumber, setCartItemsNumber] = useState(0);
   const classes = useStyles();
   const filterOptions = createFilterOptions({
     stringify: (option) => option,
     limit: 8,
   });
-
+  useEffect(() => {
+    const fetchData = async () => {
+      const cartData = await axios.post('http://localhost:5000/api/cart', {
+        customerId: user._id,
+      });
+      setCartItemsNumber(cartData.data.data.length);
+    };
+    fetchData();
+  });
   return (
     <div style={{ marginBottom: '6.25rem' }}>
       <AppBar position="fixed" color="inherit">
@@ -52,6 +65,11 @@ const Header = ({ data, isLoggedIn, user, sprites }) => {
             options={data.map((option) => option.name)}
             getOptionLabel={(option) => option}
             filterOptions={filterOptions}
+            {...(window.location.href.includes('product')
+              ? {
+                  value: decodeURIComponent(title),
+                }
+              : { value: '' })}
             renderInput={(params) => (
               <TextField
                 // eslint-disable-next-line react/jsx-props-no-spreading
@@ -63,7 +81,7 @@ const Header = ({ data, isLoggedIn, user, sprites }) => {
             )}
             onChange={(event, value) => {
               if (value !== null) {
-                window.open(`http://localhost:3000/product/${value}`, '_blank');
+                window.location.href = `http://localhost:3000/product/${value}`;
                 console.log(event);
               }
             }}
@@ -73,11 +91,14 @@ const Header = ({ data, isLoggedIn, user, sprites }) => {
             aria-controls="menu-appbar"
             color="inherit"
             onClick={() => {
-              console.log('hii');
+              if (isLoggedIn)
+                window.location.href = `http://localhost:3000/cart`;
+              else window.location.href = `http://localhost:3000/login`;
             }}
+            style={{ margin: 'auto 20px' }}
           >
-            <Badge badgeContent={4} color="secondary">
-              <ShoppingCart style={{ fontSize: 36 }} />
+            <Badge badgeContent={cartItemsNumber} color="secondary">
+              <ShoppingCart style={{ fontSize: 30 }} />
             </Badge>
           </IconButton>
           {!isLoggedIn ? (

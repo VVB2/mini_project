@@ -49,10 +49,10 @@ const sendToken = (user, statusCode, res) => {
 
 exports.userDetails = async (req, res, next) => {
     const { jwtEncodedUser } = req.body;
-    const { id } = jwt.decode(jwtEncodedUser);
+    const { id, exp } = jwt.decode(jwtEncodedUser);
     try {
         const user = await userModel.findById(id);
-        res.status(201).json({ success: true, user });
+        res.status(201).json({ success: true, user, exp });
     } catch (error) {
         next(error);
     }

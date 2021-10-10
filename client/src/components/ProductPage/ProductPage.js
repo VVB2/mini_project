@@ -4,13 +4,13 @@ import Loading from './ProductPage.loading';
 import TopCard from './TopCard';
 import BottomCards from './BottomCards';
 
-const ProductPage = ({ location }) => {
+const ProductPage = ({ user }) => {
   const [product, setProduct] = useState([]);
   const images = [];
   const [similarProducts, setSimilarProducts] = useState([]);
   const [suggestedProducts, setSuggestedProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const title = location.pathname.substring(9);
+  const title = window.location.href.substring(30);
   const filteredSimilar = [];
   const filteredSuggested = [];
 
@@ -53,7 +53,7 @@ const ProductPage = ({ location }) => {
     <Loading />
   ) : (
     <div>
-      <TopCard images={images} data={product} />
+      <TopCard images={images} data={product} user={user} />
       <BottomCards title="Similar Products" data={filteredSimilar} />
       <BottomCards
         title="You might be interested in"

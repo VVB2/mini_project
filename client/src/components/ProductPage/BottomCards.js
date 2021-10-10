@@ -43,7 +43,6 @@ const BottomCards = ({ title, data }) => (
           <Link
             to={`/product/${data[item].title}`}
             style={{ textDecoration: 'none' }}
-            target="_blank"
             key={i}
           >
             <Card

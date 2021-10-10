@@ -18,7 +18,7 @@ import {
   InputLabel,
   Button,
 } from '@material-ui/core';
-import { AccountCircle, Settings, ExitToApp, Save } from '@material-ui/icons';
+import { AccountCircle, ExitToApp, Save } from '@material-ui/icons';
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -90,12 +90,6 @@ const Profile = ({ user, sprites }) => {
                 <AccountCircle />
               </ListItemIcon>
               <ListItemText primary="Profile" />
-            </ListItem>
-            <ListItem button component={Link} to="profile/settings">
-              <ListItemIcon>
-                <Settings />
-              </ListItemIcon>
-              <ListItemText primary="Settings" />
             </ListItem>
             <ListItem button onClick={handleLogout}>
               <ListItemIcon>

@@ -1,6 +1,8 @@
 /* eslint-disable no-undef */
 /* eslint-disable react/jsx-props-no-spreading */
 import React, { useEffect, useState, useRef } from 'react';
+import moment from 'moment';
+import jwt from 'jsonwebtoken';
 import { Container } from '@material-ui/core';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { createTheme, ThemeProvider } from '@material-ui/core/styles';
@@ -16,7 +18,7 @@ import SignupScreen from './components/LoginSignUp/SignupScreen';
 import LoginScreen from './components/LoginSignUp/LoginScreen';
 import PrivateRoute from './PrivateRoute';
 import Profile from './components/Profile/Profile';
-import ProfileSettings from './components/Profile/ProfileSettings';
+import Cart from './components/Cart/Cart';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -58,16 +60,24 @@ function App() {
       setSprites(localStorage.getItem('spriteType'));
     }
     if (localStorage.getItem('authToken')) {
-      axios
-        .post(
-          'http://localhost:5000/api/auth/userDetails',
-          { jwtEncodedUser: localStorage.getItem('authToken') },
-          config
-        )
-        .then((res) => setUser(res.data.user));
-      setIsLoggedIn(true);
+      const { exp } = jwt.decode(localStorage.getItem('authToken'));
+      if (moment.unix(exp).format('h:mm:ss') > moment().format('h:mm:ss')) {
+        axios
+          .post(
+            'http://localhost:5000/api/auth/userDetails',
+            { jwtEncodedUser: localStorage.getItem('authToken') },
+            config
+          )
+          .then((res) => {
+            setUser(res.data.user);
+          });
+        setIsLoggedIn(true);
+      } else {
+        localStorage.removeItem('authToken');
+      }
     }
   }, []);
+  console.log(window.history);
 
   return (
     pageLoaded.current && (
@@ -89,8 +99,8 @@ function App() {
             />
             <PrivateRoute
               exact
-              path="/profile/settings"
-              component={() => <ProfileSettings user={user} />}
+              path="/cart"
+              component={() => <Cart user={user} />}
               user={user}
             />
             <Route exact path="/" component={LandingPage} />
@@ -98,7 +108,10 @@ function App() {
             <Route exact path="/department" component={DepartmentWise} />
             <Route exact path="/login" component={LoginScreen} />
             <Route exact path="/signup" component={SignupScreen} />
-            <Route path="/product/:name" component={ProductPage} />
+            <Route
+              path="/product/:name"
+              component={() => <ProductPage user={user} />}
+            />
           </Container>
         </ThemeProvider>
       </Router>

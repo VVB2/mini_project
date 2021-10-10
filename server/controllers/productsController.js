@@ -1,4 +1,3 @@
-const ArtifactsModel = require('../models/Artifacts.model');
 const artifactModel = require('../models/Artifacts.model');
 
 // for pagination
@@ -63,7 +62,7 @@ exports.getLandingProducts = async (req, res, next) => {
 exports.getAllproductsByDepartment = async (req, res, next) => {
     const { dept } = req.query;
     try {
-        const artifacts = await ArtifactsModel.find({ department: dept });
+        const artifacts = await artifactModel.find({ department: dept });
         res.send({
             status: 400,
             products: artifacts,

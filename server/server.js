@@ -20,6 +20,7 @@ app.use(express.json());
 //Routes
 app.use('/api/products', require('./routes/Products'));
 app.use('/api/auth', require('./routes/User'));
+app.use('/api/cart', require('./routes/Cart'));
 
 app.use(errorHandler);
 

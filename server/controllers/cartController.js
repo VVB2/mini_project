@@ -1,15 +1,23 @@
 const cartModel = require('../models/Cart.model');
 const userModel = require('../models/User.model');
+const artifactModel = require('../models/Artifacts.model');
 
 exports.getProductsFromCart = async (req, res, next) => {
     const { customerId } = req.body;
+    const artifactInfo = [];
     try {
         const cartItem = await cartModel.find({
             customerId,
         });
+        for (const key in cartItem) {
+            const artifact = await artifactModel.find({
+                title: cartItem[key].productName,
+            });
+            artifactInfo.push(artifact);
+        }
         res.send({
             status: 201,
-            data: cartItem,
+            data: artifactInfo,
         });
     } catch (error) {
         next(error);

@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable no-underscore-dangle */
 import React, { useState, useEffect } from 'react';
@@ -37,6 +38,7 @@ const Header = ({ data, isLoggedIn, user, sprites }) => {
     stringify: (option) => option,
     limit: 8,
   });
+
   useEffect(() => {
     const fetchData = async () => {
       const cartData = await axios.post('http://localhost:5000/api/cart', {

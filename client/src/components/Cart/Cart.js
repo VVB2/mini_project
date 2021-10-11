@@ -12,12 +12,16 @@ import CartItem from './CartItem';
 
 const Cart = ({ user }) => {
   const [cartData, setCartData] = useState([]);
+  let totalPrice = 0;
   const [parentCheckbox, setParentCheckbox] = useState(true);
   const [childrenCheckbox, setChildrenCheckbox] = useState(parentCheckbox);
   const handleChangeParent = () => {
     setParentCheckbox(!parentCheckbox);
     setChildrenCheckbox(!parentCheckbox);
   };
+  for (const key in cartData) {
+    totalPrice += cartData[key][0].price;
+  }
   useEffect(() => {
     const fetchData = async () => {
       axios
@@ -45,14 +49,41 @@ const Cart = ({ user }) => {
             }
             label="Deselect All"
           />
+          <Typography
+            variant="subtitle2"
+            align="right"
+            display="block"
+            style={{ fontWeight: 'bold', marginRight: '10px' }}
+          >
+            Price (in ₹)
+          </Typography>
         </div>
         <Divider />
         {Object.keys(cartData).map((item, i) => (
           <div key={i}>
-            <CartItem data={cartData[item][0]} checked={parentCheckbox} />
+            <CartItem
+              data={cartData[item][0]}
+              checked={parentCheckbox}
+              user={user}
+            />
             <Divider />
           </div>
         ))}
+        <Typography
+          variant="body1"
+          align="right"
+          display="block"
+          style={{ color: '#e57373', fontWeight: 'bold', marginTop: '10px' }}
+        >
+          <span>
+            <span style={{ fontWeight: 'bold', color: '#fff' }}>
+              Subtotal ({cartData.length}{' '}
+              {cartData.length > 1 ? 'items' : 'item'}
+              ):
+            </span>
+            ₹ {new Intl.NumberFormat('en-IN').format(totalPrice)}
+          </span>
+        </Typography>
       </Card>
     </div>
   );

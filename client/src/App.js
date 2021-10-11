@@ -61,7 +61,7 @@ function App() {
     }
     if (localStorage.getItem('authToken')) {
       const { exp } = jwt.decode(localStorage.getItem('authToken'));
-      if (moment.unix(exp).format('h:mm:ss') > moment().format('h:mm:ss')) {
+      if (moment(moment.unix(exp).format()).isAfter(moment().format())) {
         axios
           .post(
             'http://localhost:5000/api/auth/userDetails',
@@ -77,7 +77,6 @@ function App() {
       }
     }
   }, []);
-  console.log(window.history);
 
   return (
     pageLoaded.current && (

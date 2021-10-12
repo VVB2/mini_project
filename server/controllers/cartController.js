@@ -10,6 +10,7 @@ exports.getProductsFromCart = async (req, res, next) => {
             customerId,
         });
         for (const key in cartItem) {
+            const savedForLater = cartItem[key].savedForLater;
             const artifact = await artifactModel.find({
                 title: cartItem[key].productName,
             });
@@ -17,7 +18,8 @@ exports.getProductsFromCart = async (req, res, next) => {
         }
         res.send({
             status: 201,
-            data: artifactInfo,
+            artifactInfo,
+            cartItem,
         });
     } catch (error) {
         next(error);

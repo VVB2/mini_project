@@ -96,12 +96,7 @@ function App() {
               component={() => <Profile user={user} sprites={sprites} />}
               user={user}
             />
-            <PrivateRoute
-              exact
-              path="/cart"
-              component={() => <Cart user={user} />}
-              user={user}
-            />
+
             <Route exact path="/" component={LandingPage} />
             <Route exact path="/products" component={ArtifactsCards} />
             <Route exact path="/department" component={DepartmentWise} />
@@ -112,6 +107,12 @@ function App() {
               component={() => <ProductPage user={user} />}
             />
           </Container>
+          <PrivateRoute
+            exact
+            path="/cart"
+            component={() => <Cart user={user} />}
+            user={user}
+          />
         </ThemeProvider>
       </Router>
     )

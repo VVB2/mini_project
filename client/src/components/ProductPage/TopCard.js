@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useHistory } from 'react-router';
 import { Grid, Typography, Card, Divider, Button } from '@material-ui/core';
@@ -11,17 +11,29 @@ import 'react-slideshow-image/dist/styles.css';
 
 const TopCard = ({ data, images, user }) => {
   const history = useHistory();
+  const [cartItems, setCartItems] = useState([]);
+  let isInCart = false;
+  useEffect(() => {
+    const fetchData = async () => {
+      const cartData = await axios.post('http://localhost:5000/api/cart', {
+        customerId: user._id,
+      });
+      setCartItems(cartData.data.cartItem);
+    };
+    if (user) fetchData();
+  }, []);
+  for (const key in cartItems) {
+    if (cartItems[key].productName === data[0].title) {
+      isInCart = true;
+    }
+  }
   const handleAddToCart = async () => {
     if (user.username) {
       try {
-        const cartData = await axios.post(
-          'http://localhost:5000/api/cart/addToCart',
-          {
-            customerId: user._id,
-            productName: data[0].title,
-          }
-        );
-        console.log(cartData);
+        await axios.post('http://localhost:5000/api/cart/addToCart', {
+          customerId: user._id,
+          productName: data[0].title,
+        });
         history.go(0);
       } catch (error) {
         console.log(error);
@@ -71,7 +83,9 @@ const TopCard = ({ data, images, user }) => {
                 magnifierBorderColor="#dc5036e6"
                 magnifierSize="50%"
                 style={{
-                  objectFit: 'contain',
+                  maxWidth: '500px',
+                  maxHeight: '600px',
+                  objectfit: 'cover',
                   display: 'block',
                   margin: 'auto auto',
                 }}
@@ -80,18 +94,34 @@ const TopCard = ({ data, images, user }) => {
           </Carousel>
           <Grid container item xs={12} style={{ margin: '15px 0 0 50px' }}>
             <Grid item xs={5}>
-              <Button
-                startIcon={<ShoppingCart />}
-                style={{
-                  padding: '18px 8px',
-                  width: 195,
-                  height: 56,
-                  backgroundColor: '#ff9f00',
-                }}
-                onClick={handleAddToCart}
-              >
-                add to cart
-              </Button>
+              {!isInCart ? (
+                <Button
+                  startIcon={<ShoppingCart />}
+                  style={{
+                    padding: '18px 8px',
+                    width: 195,
+                    height: 56,
+                    backgroundColor: '#ff9f00',
+                  }}
+                  onClick={handleAddToCart}
+                >
+                  add to cart
+                </Button>
+              ) : (
+                <Button
+                  startIcon={<ShoppingCart />}
+                  variant="contained"
+                  style={{
+                    padding: '18px 8px',
+                    width: 195,
+                    height: 56,
+                    // backgroundColor: '#ff9f00',
+                  }}
+                  disabled
+                >
+                  already in cart
+                </Button>
+              )}
             </Grid>
             <Grid item xs={7}>
               <Button

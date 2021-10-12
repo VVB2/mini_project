@@ -31,7 +31,9 @@ const useStyles = makeStyles(() => ({
 }));
 
 const Header = ({ data, isLoggedIn, user, sprites }) => {
-  const title = window.location.href.substring(30);
+  let title = '';
+  if (window.location.href.substring(22, 30) !== 'products')
+    title = window.location.href.substring(30);
   const [cartItemsNumber, setCartItemsNumber] = useState(0);
   const classes = useStyles();
   const filterOptions = createFilterOptions({
@@ -44,7 +46,7 @@ const Header = ({ data, isLoggedIn, user, sprites }) => {
       const cartData = await axios.post('http://localhost:5000/api/cart', {
         customerId: user._id,
       });
-      setCartItemsNumber(cartData.data.data.length);
+      setCartItemsNumber(cartData.data.artifactInfo.length);
     };
     fetchData();
   });
@@ -99,7 +101,7 @@ const Header = ({ data, isLoggedIn, user, sprites }) => {
             }}
             style={{ margin: 'auto 20px' }}
           >
-            <Badge badgeContent={cartItemsNumber} color="secondary">
+            <Badge badgeContent={cartItemsNumber} color="error" showZero>
               <ShoppingCart style={{ fontSize: 30 }} />
             </Badge>
           </IconButton>

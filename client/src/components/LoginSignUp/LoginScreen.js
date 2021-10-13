@@ -34,12 +34,7 @@ const LoginScreen = () => {
         'Content-Type': 'application/json',
       },
     };
-    if (
-      email === '' ||
-      !email.match(
-        /^[a-z0-9][a-z0-9-_.]+@([a-z]|[a-z0-9]?[a-z0-9-]+[a-z0-9])\.[a-z0-9]{2,10}(?:\.[a-z]{2,10})?$/
-      )
-    ) {
+    if (email === '' || !email.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/)) {
       setEmailError(true);
     } else if (password === '') {
       setPasswordError(true);

@@ -124,17 +124,33 @@ const TopCard = ({ data, images, user }) => {
               )}
             </Grid>
             <Grid item xs={7}>
-              <Button
-                startIcon={<FlashOn />}
-                style={{
-                  padding: '18px 8px',
-                  width: 195,
-                  height: 56,
-                  backgroundColor: '#fb641b',
-                }}
-              >
-                buy now
-              </Button>
+              {!isInCart ? (
+                <Button
+                  startIcon={<FlashOn />}
+                  style={{
+                    padding: '18px 8px',
+                    width: 195,
+                    height: 56,
+                    backgroundColor: '#fb641b',
+                  }}
+                >
+                  buy now
+                </Button>
+              ) : (
+                <Button
+                  startIcon={<FlashOn />}
+                  variant="contained"
+                  style={{
+                    padding: '18px 8px',
+                    width: 195,
+                    height: 56,
+                    // backgroundColor: '#fb641b',
+                  }}
+                  disabled
+                >
+                  buy now
+                </Button>
+              )}
             </Grid>
           </Grid>
         </Grid>

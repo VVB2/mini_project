@@ -30,7 +30,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const Header = ({ data, isLoggedIn, user, sprites }) => {
+const Header = ({ data, isLoggedIn, user }) => {
   let title = '';
   if (window.location.href.substring(22, 30) !== 'products')
     title = window.location.href.substring(30);
@@ -83,7 +83,7 @@ const Header = ({ data, isLoggedIn, user, sprites }) => {
                 className={classes.search}
               />
             )}
-            onChange={(event, value) => {
+            onUpdate={(event, value) => {
               if (value !== null) {
                 window.location.href = `http://localhost:3000/product/${value}`;
                 console.log(event);
@@ -125,7 +125,7 @@ const Header = ({ data, isLoggedIn, user, sprites }) => {
             >
               <Avatar
                 alt={user.username}
-                src={`https://avatars.dicebear.com/api/${sprites}/${user.username}.svg`}
+                src={`https://avatars.dicebear.com/api/${user.profilePicture}/${user.username}.svg`}
               />
             </IconButton>
           )}

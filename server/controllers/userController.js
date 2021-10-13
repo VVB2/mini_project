@@ -57,3 +57,16 @@ exports.userDetails = async (req, res, next) => {
         next(error);
     }
 };
+
+exports.updateUser = async (req, res, next) => {
+    const { username, profilePicture } = req.body;
+    try {
+        const user = await userModel.findOneAndUpdate(username, {
+            profilePicture: profilePicture,
+        });
+        console.log(user);
+        sendToken(user, 201, res);
+    } catch (error) {
+        next(error);
+    }
+};

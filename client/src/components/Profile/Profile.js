@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+import axios from 'axios';
 import {
   Drawer,
   List,
@@ -44,8 +45,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Profile = ({ user, sprites }) => {
-  const [sprite, setSprite] = useState(sprites);
+const Profile = ({ user }) => {
+  const [sprite, setSprite] = useState(user.profilePicture);
   const spriteTypes = [
     'Male',
     'Female',
@@ -103,7 +104,7 @@ const Profile = ({ user, sprites }) => {
       <Toolbar />
       <img
         alt="profile-image"
-        src={`https://avatars.dicebear.com/api/${sprites}/${user.username}.svg`}
+        src={`https://avatars.dicebear.com/api/${user.profilePicture}/${user.username}.svg`}
         width="20%"
         style={{
           display: 'block',
@@ -131,7 +132,7 @@ const Profile = ({ user, sprites }) => {
           <FormControl variant="outlined">
             <InputLabel htmlFor="age-native-simple">Age</InputLabel>
             <Select
-              defaultValue={sprites}
+              defaultValue={user.profilePicture}
               autoWidth
               onChange={(event) => setSprite(event.target.value)}
               label="Age"
@@ -172,8 +173,11 @@ const Profile = ({ user, sprites }) => {
         color="secondary"
         startIcon={<Save />}
         style={{ marginTop: '5%' }}
-        onClick={() => {
-          localStorage.setItem('spriteType', sprite);
+        onClick={async () => {
+          await axios.put('http://localhost:5000/api/auth/updateUser', {
+            username: user.username,
+            profilePicture: sprite,
+          });
           window.location.href = 'http://localhost:3000/profile';
         }}
       >

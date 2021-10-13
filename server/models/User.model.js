@@ -35,7 +35,7 @@ const userSchema = mongoose.Schema({
     },
     profilePicture: {
         type: String,
-        default: 'identicons',
+        default: 'identicon',
     },
 });
 

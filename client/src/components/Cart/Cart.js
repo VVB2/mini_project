@@ -189,7 +189,7 @@ const Cart = ({ user }) => {
                         padding: '0px 30px',
                         borderRadius: '0px',
                         float: 'right',
-                        margin: '10px -80px -5px 0',
+                        margin: '10px -100px -5px 0',
                       }}
                     >
                       place order
@@ -297,7 +297,7 @@ const Cart = ({ user }) => {
           Your cart is empty!
         </Typography>
         <Typography variant="subtitle2" align="center">
-          It&apos;s a good day to buy the items you have in your mind!
+          It&apos;s a good day to buy the items you have on your mind!
         </Typography>
         <Button
           className={classes.button}

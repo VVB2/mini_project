@@ -2,6 +2,7 @@ const cartModel = require('../models/Cart.model');
 const userModel = require('../models/User.model');
 const artifactModel = require('../models/Artifacts.model');
 
+//get all prdoucts in cart
 exports.getProductsFromCart = async (req, res, next) => {
     const { customerId } = req.body;
     const artifactInfo = [];
@@ -10,7 +11,6 @@ exports.getProductsFromCart = async (req, res, next) => {
             customerId,
         });
         for (const key in cartItem) {
-            const savedForLater = cartItem[key].savedForLater;
             const artifact = await artifactModel.find({
                 title: cartItem[key].productName,
             });

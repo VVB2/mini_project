@@ -22,7 +22,6 @@ import Cart from './components/Cart/Cart';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [sprites, setSprites] = useState('identicon');
   const [user, setUser] = useState([]);
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const [name, setName] = useState([]);
@@ -56,9 +55,6 @@ function App() {
         'Content-Type': 'application/json',
       },
     };
-    if (localStorage.getItem('spriteType')) {
-      setSprites(localStorage.getItem('spriteType'));
-    }
     if (localStorage.getItem('authToken')) {
       const { exp } = jwt.decode(localStorage.getItem('authToken'));
       if (moment(moment.unix(exp).format()).isAfter(moment().format())) {
@@ -84,16 +80,11 @@ function App() {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Container>
-            <Header
-              data={name}
-              isLoggedIn={isLoggedIn}
-              user={user}
-              sprites={sprites}
-            />
+            <Header data={name} isLoggedIn={isLoggedIn} user={user} />
             <PrivateRoute
               exact
               path="/profile"
-              component={() => <Profile user={user} sprites={sprites} />}
+              component={() => <Profile user={user} />}
               user={user}
             />
 

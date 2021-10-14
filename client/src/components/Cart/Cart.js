@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
+import jwt from 'jsonwebtoken';
 import {
   Card,
   Typography,
@@ -16,6 +17,35 @@ import useStyles from '../LoginSignUp/Auth.styles';
 import emptyCart from '../../assets/emptyCart.png';
 
 const Cart = ({ user }) => {
+  const handleSingleCheckout = (cartInfo, userDetails) => {
+    const checkOutInfo = jwt.sign(
+      { cartInfo, username: userDetails.username },
+      process.env.REACT_APP_JWT_SECRET,
+      {
+        expiresIn: process.env.REACT_APP_JWT_EXPIRE,
+      }
+    );
+    localStorage.setItem('checkoutInfo', checkOutInfo);
+    window.location.href = 'http://localhost:3000/checkout';
+  };
+  const handleMultipleCheckout = (cartInfo, userDetails) => {
+    const title = [];
+    for (const key in cartInfo) {
+      title.push(cartInfo[key][0].title);
+    }
+    const checkOutInfo = jwt.sign(
+      {
+        cartInfo: title,
+        username: userDetails.username,
+      },
+      process.env.REACT_APP_JWT_SECRET,
+      {
+        expiresIn: process.env.REACT_APP_JWT_EXPIRE,
+      }
+    );
+    localStorage.setItem('checkoutInfo', checkOutInfo);
+    window.location.href = 'http://localhost:3000/checkout';
+  };
   const handleShopping = () => {
     window.location.href = 'http://localhost:3000/products?p=1';
   };
@@ -185,6 +215,9 @@ const Cart = ({ user }) => {
                     </Button>
                     <Button
                       className={classes.button}
+                      onClick={() => {
+                        handleSingleCheckout(cartData[item][0].title, user);
+                      }}
                       style={{
                         padding: '0px 30px',
                         borderRadius: '0px',
@@ -260,6 +293,9 @@ const Cart = ({ user }) => {
             </div>
             <Divider />
             <Button
+              onClick={() => {
+                handleMultipleCheckout(cartData, user);
+              }}
               className={classes.button}
               style={{
                 padding: '16px 30px',

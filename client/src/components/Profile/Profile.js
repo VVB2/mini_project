@@ -61,6 +61,7 @@ const Profile = ({ user }) => {
   ];
   const handleLogout = () => {
     localStorage.removeItem('authToken');
+    localStorage.removeItem('checkoutInfo');
     window.location.href = 'http://localhost:3000';
   };
   const classes = useStyles();

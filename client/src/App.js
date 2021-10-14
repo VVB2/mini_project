@@ -19,6 +19,7 @@ import LoginScreen from './components/LoginSignUp/LoginScreen';
 import PrivateRoute from './PrivateRoute';
 import Profile from './components/Profile/Profile';
 import Cart from './components/Cart/Cart';
+import Checkout from './components/Checkout/Checkout';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -56,21 +57,33 @@ function App() {
       },
     };
     if (localStorage.getItem('authToken')) {
-      const { exp } = jwt.decode(localStorage.getItem('authToken'));
-      if (moment(moment.unix(exp).format()).isAfter(moment().format())) {
-        axios
-          .post(
-            'http://localhost:5000/api/auth/userDetails',
-            { jwtEncodedUser: localStorage.getItem('authToken') },
-            config
-          )
-          .then((res) => {
-            setUser(res.data.user);
-          });
-        setIsLoggedIn(true);
-      } else {
-        localStorage.removeItem('authToken');
-      }
+      jwt.verify(
+        localStorage.getItem('authToken'),
+        process.env.REACT_APP_JWT_SECRET,
+        (err) => {
+          if (!err) {
+            const { exp } = jwt.decode(localStorage.getItem('authToken'));
+            if (moment(moment.unix(exp).format()).isAfter(moment().format())) {
+              axios
+                .post(
+                  'http://localhost:5000/api/auth/userDetails',
+                  { jwtEncodedUser: localStorage.getItem('authToken') },
+                  config
+                )
+                .then((res) => {
+                  setUser(res.data.user);
+                });
+              setIsLoggedIn(true);
+            } else {
+              localStorage.removeItem('authToken');
+              localStorage.removeItem('checkoutInfo');
+            }
+          } else {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('checkoutInfo');
+          }
+        }
+      );
     }
   }, []);
 
@@ -87,7 +100,12 @@ function App() {
               component={() => <Profile user={user} />}
               user={user}
             />
-
+            <PrivateRoute
+              exact
+              path="/checkout"
+              component={Checkout}
+              user={user}
+            />
             <Route exact path="/" component={LandingPage} />
             <Route exact path="/products" component={ArtifactsCards} />
             <Route exact path="/department" component={DepartmentWise} />

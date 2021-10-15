@@ -10,10 +10,21 @@ import {
 import moment from 'moment';
 import jwt from 'jsonwebtoken';
 import Address from './Address';
+import Payment from './Payment';
+import ReviewOrder from './ReviewOrder';
 
 const Checkout = () => {
   const [activeStep, setActiveStep] = useState(0);
-  const steps = ['ADDRESS INFORMATION', 'REVIEW', 'PAYMENT'];
+  const [shippingData, setShippingData] = useState([]);
+  const [cartInfo, setCartInfo] = useState([]);
+  const steps = ['ADDRESS INFORMATION', 'PAYMENT'];
+  console.log(cartInfo);
+  for (const key in cartInfo.cartInfo) {
+    console.log(
+      cartInfo.cartInfo[key].productName,
+      cartInfo.cartInfo[key].price
+    );
+  }
   let checkout = '';
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -21,18 +32,11 @@ const Checkout = () => {
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
-  function getStepContent(stepIndex) {
-    switch (stepIndex) {
-      case 0:
-        return <Address />;
-      case 1:
-        return 'What is an ad group anyways?';
-      case 2:
-        return 'This is the bit I really care about!';
-      default:
-        return 'Unknown stepIndex';
-    }
-  }
+  const next = (data) => {
+    setShippingData(data);
+    handleNext();
+  };
+  const Form = () => (activeStep === 0 ? <Address next={next} /> : <Payment />);
   useEffect(() => {
     if (localStorage.getItem('checkoutInfo')) {
       jwt.verify(
@@ -46,7 +50,7 @@ const Checkout = () => {
                 moment().format()
               )
             ) {
-              console.log(checkout);
+              setCartInfo(checkout);
             }
           } else {
             localStorage.removeItem('checkoutInfo');
@@ -89,21 +93,7 @@ const Checkout = () => {
           </Step>
         ))}
       </Stepper>
-      {activeStep === steps.length ? (
-        <div>
-          <Typography>All steps completed</Typography>
-        </div>
-      ) : (
-        <div>
-          {getStepContent(activeStep)}
-          <Button disabled={activeStep === 0} onClick={handleBack}>
-            Back
-          </Button>
-          <Button variant="contained" color="primary" onClick={handleNext}>
-            {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-          </Button>
-        </div>
-      )}
+      {activeStep === steps.length ? <ReviewOrder /> : <Form />}
       <Typography variant="subtitle1" color="textSecondary" id="timer" />
     </Card>
   );

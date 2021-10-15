@@ -4,6 +4,7 @@ import { Rating } from '@material-ui/lab';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import Soldout from '../../assets/sold_out.png';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 
 function ArtifactsCard({ data }) {
@@ -15,14 +16,27 @@ function ArtifactsCard({ data }) {
     >
       <Card style={{ marginBottom: '20px' }}>
         <Grid container>
-          <Grid item xs={3}>
+          <Grid item xs={3} style={{ position: 'relative' }}>
             <LazyLoadImage
               src={data.coverImage}
               alt={data.title}
               effect="blur"
               width="90%"
               height="250px"
+              style={{ position: 'relative', top: 0, left: 0 }}
             />
+            {data.isSold && (
+              <LazyLoadImage
+                src={Soldout}
+                style={{
+                  position: 'absolute',
+                  top: '-0px',
+                  left: '-3px',
+                  width: '85%',
+                }}
+                alt="sold out logo"
+              />
+            )}
           </Grid>
           <Grid item xs={9}>
             <Typography

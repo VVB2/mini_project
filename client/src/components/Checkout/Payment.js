@@ -1,13 +1,13 @@
 import React from 'react';
 
-const ReviewOrder = () => {
+const Payment = () => {
   console.log('jhi');
   return (
     <div>
-      Review
+      Payment
       <div>Hello</div>
     </div>
   );
 };
 
-export default ReviewOrder;
+export default Payment;

@@ -97,13 +97,22 @@ const TopCard = ({ data, images, user }) => {
               {!isInCart ? (
                 <Button
                   startIcon={<ShoppingCart />}
-                  style={{
-                    padding: '18px 8px',
-                    width: 195,
-                    height: 56,
-                    backgroundColor: '#ff9f00',
-                  }}
+                  style={
+                    !data[0].isSold
+                      ? {
+                          padding: '18px 8px',
+                          width: 195,
+                          height: 56,
+                          backgroundColor: '#ff9f00',
+                        }
+                      : {
+                          padding: '18px 8px',
+                          width: 195,
+                          height: 56,
+                        }
+                  }
                   onClick={handleAddToCart}
+                  disabled={data[0].isSold}
                 >
                   add to cart
                 </Button>
@@ -115,7 +124,6 @@ const TopCard = ({ data, images, user }) => {
                     padding: '18px 8px',
                     width: 195,
                     height: 56,
-                    // backgroundColor: '#ff9f00',
                   }}
                   disabled
                 >
@@ -127,12 +135,21 @@ const TopCard = ({ data, images, user }) => {
               {!isInCart ? (
                 <Button
                   startIcon={<FlashOn />}
-                  style={{
-                    padding: '18px 8px',
-                    width: 195,
-                    height: 56,
-                    backgroundColor: '#fb641b',
-                  }}
+                  style={
+                    !data[0].isSold
+                      ? {
+                          padding: '18px 8px',
+                          width: 195,
+                          height: 56,
+                          backgroundColor: '#fb641b',
+                        }
+                      : {
+                          padding: '18px 8px',
+                          width: 195,
+                          height: 56,
+                        }
+                  }
+                  disabled={data[0].isSold}
                 >
                   buy now
                 </Button>
@@ -144,7 +161,6 @@ const TopCard = ({ data, images, user }) => {
                     padding: '18px 8px',
                     width: 195,
                     height: 56,
-                    // backgroundColor: '#fb641b',
                   }}
                   disabled
                 >

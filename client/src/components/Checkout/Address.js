@@ -1,19 +1,25 @@
-import React from 'react';
+/* eslint-disable react/jsx-props-no-spreading */
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
   Typography,
   Grid,
   Divider,
-  TextField,
   FormControl,
   InputLabel,
   Select,
-  Checkbox,
-  FormControlLabel,
+  Button,
+  MenuItem,
 } from '@material-ui/core';
+import { useForm, FormProvider } from 'react-hook-form';
 import { isValidPhoneNumber } from 'libphonenumber-js';
 import axios from 'axios';
+import CustomText from './CustomText';
 
-const Address = () => {
+const Address = ({ next }) => {
+  const [selectedState, setSelectedState] = useState('');
+  const [addressType, setAddressType] = useState('');
+  const methods = useForm();
   const state = [
     'Andhra Pradesh',
     'Arunachal Pradesh',
@@ -53,135 +59,85 @@ const Address = () => {
         enter a new delivery address.{' '}
       </Typography>
       <Divider /> <div>&quot;Deliver to this address&quot;</div>
+      <Divider />
       <br />
       <Divider />
-      <Grid container spacing={3}>
-        <Grid item xs={8}>
-          <TextField
-            id="fullname"
-            label="Full Name"
-            variant="outlined"
-            size="small"
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={8}>
-          <TextField
-            id="fullname"
-            label="Mobile Number"
-            variant="outlined"
-            size="small"
-            fullWidth
-            onChange={(e) => {
-              console.log(isValidPhoneNumber(e.target.value, 'IN'));
-            }}
-          />
-        </Grid>
-        <Grid item xs={8}>
-          <TextField
-            id="fullname"
-            label="Pincode"
-            variant="outlined"
-            size="small"
-            fullWidth
-            onChange={async (e) => {
-              await axios
-                .get(`https://api.postalpincode.in/pincode/${e.target.value}`)
-                .then((res) => console.log(res.data[0].Status));
-            }}
-          />
-        </Grid>
-        <Grid item xs={8}>
-          <TextField
-            id="fullname"
-            label="Flat, House no., Building, Company, Apartment"
-            variant="outlined"
-            size="small"
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={8}>
-          <TextField
-            id="fullname"
-            label="Area, Street, Sector, Village"
-            variant="outlined"
-            size="small"
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={8}>
-          <TextField
-            id="fullname"
-            label="Landmark"
-            variant="outlined"
-            size="small"
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <TextField
-            id="fullname"
-            label="Town/City"
-            variant="outlined"
-            size="small"
-            fullWidth
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <FormControl variant="outlined" size="small" fullWidth>
-            <InputLabel htmlFor="choose_state">State</InputLabel>
-            <Select
-              native
-              label="State"
-              inputProps={{
-                name: 'choose state',
-                id: 'choose_state',
-              }}
+      <FormProvider {...methods}>
+        <form
+          onSubmit={methods.handleSubmit((data) => {
+            console.log(data);
+            next({ ...data, selectedState, addressType });
+          })}
+        >
+          <Grid container spacing={3}>
+            <CustomText label="Full Name" name="fullName" />
+            <CustomText label="Mobile Number" name="mobileNumber" />
+            <CustomText label="Pincode" name="pincode" />
+            <CustomText label="Flat, House no, Building" name="address1" />
+            <CustomText label="Area, Street, Village" name="address2" />
+            <CustomText label="Landmark" name="landmark" />
+            <CustomText label="Town / City" name="town" />
+            <Grid item xs={6}>
+              <FormControl variant="outlined" fullWidth>
+                <InputLabel htmlFor="choose_state">State</InputLabel>
+                <Select
+                  label="State"
+                  inputProps={{
+                    name: 'choose state',
+                    id: 'choose_state',
+                  }}
+                  onChange={(e) => setSelectedState(e.target.value)}
+                >
+                  {state.map((item, key) => (
+                    <MenuItem value={item} key={key}>
+                      {item}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="h6">Add delivery instructions</Typography>
+              <Typography variant="subtitle2">
+                Preferences are used to plan your delivery. However, shipments
+                can sometimes arrive early or later than planned.
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <FormControl variant="outlined" fullWidth>
+                <InputLabel htmlFor="address_type">Address Type</InputLabel>
+                <Select
+                  label="Address Type"
+                  inputProps={{
+                    name: 'choose state',
+                    id: 'address_type',
+                  }}
+                  onChange={(e) => setAddressType(e.target.value)}
+                >
+                  <MenuItem value="Home">Home (7 AM - 9 PM delivery)</MenuItem>
+                  <MenuItem value="Office/Commerical">
+                    Office / Commerical (10 AM - 6 PM delivery)
+                  </MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+          </Grid>
+          <br />
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Button
+              component={Link}
+              to="/cart"
+              variant="contained"
+              color="secondary"
             >
-              <option aria-label="Choose a state" value="" />
-              {state.map((item, key) => (
-                <option value={item} key={key}>
-                  {item}
-                </option>
-              ))}
-            </Select>
-          </FormControl>
-        </Grid>
-        <Grid item xs={12}>
-          <FormControlLabel
-            control={<Checkbox name="defaultAddress" color="primary" />}
-            label="Make this my default address"
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="h6">Add delivery instructions</Typography>
-          <Typography variant="subtitle2">
-            Preferences are used to plan your delivery. However, shipments can
-            sometimes arrive early or later than planned.
-          </Typography>
-        </Grid>
-        <Grid item xs={6}>
-          <FormControl variant="outlined" size="small" fullWidth>
-            <InputLabel htmlFor="address_type">Address Type</InputLabel>
-            <Select
-              native
-              label="Address Type"
-              inputProps={{
-                name: 'choose state',
-                id: 'address_type',
-              }}
-            >
-              <option aria-label="Select an address type" value="" />
-              <option value="Home (7 AM - 9 PM delivery)">
-                Home (7 AM - 9 PM delivery)
-              </option>
-              <option value="Office/Commerical (10 AM - 6 PM delivery)">
-                Office/Commerical (10 AM - 6 PM delivery)
-              </option>
-            </Select>
-          </FormControl>
-        </Grid>
-      </Grid>
+              Back To Cart
+            </Button>
+            <Button type="submit" variant="contained" color="primary">
+              Next
+            </Button>
+          </div>
+        </form>
+      </FormProvider>
     </div>
   );
 };

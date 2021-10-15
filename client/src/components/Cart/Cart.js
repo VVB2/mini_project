@@ -19,7 +19,10 @@ import emptyCart from '../../assets/emptyCart.png';
 const Cart = ({ user }) => {
   const handleSingleCheckout = (cartInfo, userDetails) => {
     const checkOutInfo = jwt.sign(
-      { cartInfo, username: userDetails.username },
+      {
+        cartInfo: [{ productName: cartInfo.title, price: cartInfo.price }],
+        username: userDetails.username,
+      },
       process.env.REACT_APP_JWT_SECRET,
       {
         expiresIn: process.env.REACT_APP_JWT_EXPIRE,
@@ -29,13 +32,16 @@ const Cart = ({ user }) => {
     window.location.href = 'http://localhost:3000/checkout';
   };
   const handleMultipleCheckout = (cartInfo, userDetails) => {
-    const title = [];
+    const info = [];
     for (const key in cartInfo) {
-      title.push(cartInfo[key][0].title);
+      info.push({
+        productName: cartInfo[key][0].title,
+        price: cartInfo[key][0].price,
+      });
     }
     const checkOutInfo = jwt.sign(
       {
-        cartInfo: title,
+        cartInfo: info,
         username: userDetails.username,
       },
       process.env.REACT_APP_JWT_SECRET,
@@ -216,7 +222,7 @@ const Cart = ({ user }) => {
                     <Button
                       className={classes.button}
                       onClick={() => {
-                        handleSingleCheckout(cartData[item][0].title, user);
+                        handleSingleCheckout(cartData[item][0], user);
                       }}
                       style={{
                         padding: '0px 30px',

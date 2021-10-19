@@ -5,15 +5,17 @@ const orderSchema = mongoose.Schema({
         type: Date,
         default: Date.now(),
     },
-    price: Number,
-    shipTo: Object,
+    shipping: Object,
+    customer: Object,
     orderId: String,
-    productName: String,
-    expectedDelivery: Date,
+    items: Object,
+    expectedDelivery: String,
+    stripePaymentId: String,
     deliveryStatus: {
         type: String,
         default: 'Ordered',
     },
+    customerId: String,
 });
 
 const OrdersModel = mongoose.model('OrdersData', orderSchema);

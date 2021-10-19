@@ -13,22 +13,30 @@ import {
   Grid,
   Container,
 } from '@material-ui/core';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 import useStyles from '../LoginSignUp/Auth.styles';
 import emptyCart from '../../assets/emptyCart.png';
+import Soldout from '../../assets/sold_out.png';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 const Cart = ({ user }) => {
+  let isAvailable = true;
   const handleSingleCheckout = (cartInfo, userDetails) => {
     const checkOutInfo = jwt.sign(
       {
-        cartInfo: [{ productName: cartInfo.title, price: cartInfo.price }],
-        username: userDetails.username,
+        cartInfo: [
+          {
+            productName: cartInfo.title,
+            price: cartInfo.price,
+            expectedDeliveryDays: cartInfo.rating,
+            coverImage: cartInfo.coverImage,
+          },
+        ],
+        username: userDetails._id,
       },
-      process.env.REACT_APP_JWT_SECRET,
-      {
-        expiresIn: process.env.REACT_APP_JWT_EXPIRE,
-      }
+      process.env.REACT_APP_JWT_SECRET
     );
-    localStorage.setItem('checkoutInfo', checkOutInfo);
+    sessionStorage.setItem('checkoutInfo', checkOutInfo);
     window.location.href = 'http://localhost:3000/checkout';
   };
   const handleMultipleCheckout = (cartInfo, userDetails) => {
@@ -37,19 +45,18 @@ const Cart = ({ user }) => {
       info.push({
         productName: cartInfo[key][0].title,
         price: cartInfo[key][0].price,
+        expectedDeliveryDays: cartInfo[key][0].rating,
+        coverImage: cartInfo[key][0].coverImage,
       });
     }
     const checkOutInfo = jwt.sign(
       {
         cartInfo: info,
-        username: userDetails.username,
+        username: userDetails._id,
       },
-      process.env.REACT_APP_JWT_SECRET,
-      {
-        expiresIn: process.env.REACT_APP_JWT_EXPIRE,
-      }
+      process.env.REACT_APP_JWT_SECRET
     );
-    localStorage.setItem('checkoutInfo', checkOutInfo);
+    sessionStorage.setItem('checkoutInfo', checkOutInfo);
     window.location.href = 'http://localhost:3000/checkout';
   };
   const handleShopping = () => {
@@ -67,7 +74,11 @@ const Cart = ({ user }) => {
     });
     window.history.go(0);
   };
+
   for (const key in cartData) {
+    if (cartData[key][0].isSold) {
+      isAvailable = false;
+    }
     totalPrice += cartData[key][0].price;
   }
   useEffect(() => {
@@ -113,8 +124,26 @@ const Cart = ({ user }) => {
                       <img
                         src={cartData[item][0].coverImage}
                         alt={cartData[item][0].title}
-                        style={{ width: '250px', height: '250px' }}
+                        style={{
+                          position: 'relative',
+                          top: 0,
+                          left: 0,
+                          width: '250px',
+                          height: '250px',
+                        }}
                       />
+                      {cartData[item][0].isSold && (
+                        <LazyLoadImage
+                          src={Soldout}
+                          style={{
+                            position: 'absolute',
+                            top: 180 + i * 266 + 20,
+                            left: '30px',
+                            height: '266px',
+                          }}
+                          alt="sold out logo"
+                        />
+                      )}
                     </Link>
                   </Grid>
                   <Grid item xs={8}>
@@ -219,20 +248,37 @@ const Cart = ({ user }) => {
                     >
                       Remove from cart
                     </Button>
-                    <Button
-                      className={classes.button}
-                      onClick={() => {
-                        handleSingleCheckout(cartData[item][0], user);
-                      }}
-                      style={{
-                        padding: '0px 30px',
-                        borderRadius: '0px',
-                        float: 'right',
-                        margin: '10px -100px -5px 0',
-                      }}
-                    >
-                      place order
-                    </Button>
+                    {!cartData[item][0].isSold ? (
+                      <Button
+                        onClick={() => {
+                          handleSingleCheckout(cartData[item][0], user);
+                        }}
+                        className={classes.button}
+                        style={{
+                          padding: '0px 30px',
+                          borderRadius: '0px',
+                          float: 'right',
+                          margin: '10px -100px -5px 0',
+                        }}
+                      >
+                        place order
+                      </Button>
+                    ) : (
+                      <Button
+                        disabled
+                        className={classes.button}
+                        style={{
+                          padding: '0px 30px',
+                          borderRadius: '0px',
+                          float: 'right',
+                          margin: '10px -100px -5px 0',
+                          backgroundColor: 'grey',
+                          color: 'white',
+                        }}
+                      >
+                        Item not available
+                      </Button>
+                    )}
                   </Grid>
                   <Grid item xs={1}>
                     <Typography variant="body1" style={{ fontWeight: 'bold' }}>
@@ -298,20 +344,37 @@ const Cart = ({ user }) => {
               </span>
             </div>
             <Divider />
-            <Button
-              onClick={() => {
-                handleMultipleCheckout(cartData, user);
-              }}
-              className={classes.button}
-              style={{
-                padding: '16px 30px',
-                borderRadius: '0px',
-                float: 'right',
-                margin: '10px 0 -5px 0',
-              }}
-            >
-              place order
-            </Button>
+            {isAvailable ? (
+              <Button
+                onClick={() => {
+                  handleMultipleCheckout(cartData, user);
+                }}
+                className={classes.button}
+                style={{
+                  padding: '16px 30px',
+                  borderRadius: '0px',
+                  float: 'right',
+                  margin: '10px 0 -5px 0',
+                }}
+              >
+                place order
+              </Button>
+            ) : (
+              <Button
+                disabled
+                className={classes.button}
+                style={{
+                  padding: '16px 30px',
+                  borderRadius: '0px',
+                  float: 'right',
+                  margin: '10px 0 -5px 0',
+                  backgroundColor: 'grey',
+                  color: 'white',
+                }}
+              >
+                Item not available
+              </Button>
+            )}
           </Card>
         </Grid>
       </Grid>

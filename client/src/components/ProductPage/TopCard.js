@@ -75,6 +75,7 @@ const TopCard = ({ data, images, user }) => {
             autoPlay={false}
             showDots
           >
+            {data.isSold && <h1>Hii</h1>}
             {[...images].map((src, i) => (
               <GlassMagnifier
                 key={i}
@@ -88,6 +89,9 @@ const TopCard = ({ data, images, user }) => {
                   objectfit: 'cover',
                   display: 'block',
                   margin: 'auto auto',
+                  position: 'relative',
+                  top: 0,
+                  left: 0,
                 }}
               />
             ))}
@@ -109,6 +113,8 @@ const TopCard = ({ data, images, user }) => {
                           padding: '18px 8px',
                           width: 195,
                           height: 56,
+                          backgroundColor: 'grey',
+                          color: '#fff',
                         }
                   }
                   onClick={handleAddToCart}
@@ -147,6 +153,8 @@ const TopCard = ({ data, images, user }) => {
                           padding: '18px 8px',
                           width: 195,
                           height: 56,
+                          backgroundColor: 'grey',
+                          color: '#fff',
                         }
                   }
                   disabled={data[0].isSold}

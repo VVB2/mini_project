@@ -1,18 +1,22 @@
 const orderModel = require('../models/Order.model');
 const artifactModel = require('../models/Artifacts.model');
+const cartModel = require('../models/Cart.model');
 
 //get all Orders
 exports.getProductsFromOrder = async (req, res, next) => {
     const { customerId } = req.body;
+    const artifactInfo = [];
     try {
         const orderItem = await orderModel.find({
             customerId,
         });
+        JSON.stringify(orderItem);
         for (const key in orderItem) {
-            const artifact = await artifactModel.find({
-                title: orderItem[key].productName,
-            });
-            artifactInfo.push(artifact);
+            console.log(orderItem.orderItem);
+            // const artifact = await artifactModel.find({
+            //     title: orderItem.items[key].productName,
+            // });
+            // artifactInfo.push(artifact);
         }
         res.send({
             status: 201,
@@ -25,15 +29,31 @@ exports.getProductsFromOrder = async (req, res, next) => {
 };
 
 exports.createOrder = async (req, res, next) => {
-    const { price, shipTo, orderId, productName, expectedDelivery } = req.body;
+    const { orderData } = req.body;
     try {
         const orderItem = await orderModel.create({
-            price,
-            shipTo,
-            orderId,
-            productName,
-            expectedDelivery,
+            shipping: orderData.shipping,
+            orderId: orderData.orderId,
+            items: orderData.items,
+            expectedDelivery: orderData.expectedDelivery,
+            customer: orderData.customer,
+            stripePaymentId: orderData.stripePaymentId,
+            customerId: orderData.username,
         });
+        for (const key in orderData.items) {
+            console.log(orderData.items[key].productName);
+            const artifact = await artifactModel.findOneAndUpdate(
+                { title: orderData.items[key].productName },
+                {
+                    isSold: true,
+                }
+            );
+            const cart = await cartModel.deleteOne({
+                customerId: orderData.username,
+                productName: orderData.items[key].productName,
+            });
+            console.log(artifact, cart);
+        }
         res.send({
             status: 201,
             orderItem,
@@ -42,20 +62,3 @@ exports.createOrder = async (req, res, next) => {
         next(error);
     }
 };
-
-//update order deliverystatus
-// exports.removeFromCart = async (req, res, next) => {
-//     const { customerId, productName } = req.body;
-//     try {
-//         await cartModel.deleteOne({
-//             customerId,
-//             productName,
-//         });
-//         res.send({
-//             status: 201,
-//             data: `Successfull deleted ${productName}`,
-//         });
-//     } catch (error) {
-//         next(error);
-//     }
-// };

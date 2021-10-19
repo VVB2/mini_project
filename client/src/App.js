@@ -76,11 +76,13 @@ function App() {
               setIsLoggedIn(true);
             } else {
               localStorage.removeItem('authToken');
-              localStorage.removeItem('checkoutInfo');
+              sessionStorage.removeItem('checkoutInfo');
+              sessionStorage.removeItem('userInfo');
             }
           } else {
             localStorage.removeItem('authToken');
-            localStorage.removeItem('checkoutInfo');
+            sessionStorage.removeItem('checkoutInfo');
+            sessionStorage.removeItem('userInfo');
           }
         }
       );

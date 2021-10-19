@@ -22,6 +22,7 @@ app.use('/api/products', require('./routes/Products'));
 app.use('/api/auth', require('./routes/User'));
 app.use('/api/cart', require('./routes/Cart'));
 app.use('/api/order', require('./routes/Order'));
+app.use('/api/userPurchaseInfo', require('./routes/UserPurchaseInfo'));
 
 app.use(errorHandler);
 

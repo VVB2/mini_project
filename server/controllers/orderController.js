@@ -19,6 +19,7 @@ exports.getProductsFromOrder = async (req, res, next) => {
 
 exports.getIndividualProduct = async (req, res, next) => {
     const { orderId } = req.body;
+    console.log(orderId);
     try {
         const orderItem = await orderModel.find({
             orderId,

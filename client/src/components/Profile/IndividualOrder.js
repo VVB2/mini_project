@@ -1,18 +1,21 @@
+/* eslint-disable no-underscore-dangle */
 import React, { useEffect, useState } from 'react';
 import {
   Card,
   Typography,
   CardContent,
-  CardActionArea,
   Drawer,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
   Toolbar,
-  Button,
+  Stepper,
+  Step,
+  StepLabel,
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
+import { moment } from 'moment';
 import {
   AccountCircle,
   ExitToApp,
@@ -46,19 +49,39 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const IndividualOrder = () => {
-  const [getItems, setGetItems] = useState([]);
-  const orderId = window.location.pathname.substring(8);
-  console.log(orderId);
+  const [getItems, setItems] = useState([]);
+  const activeStep = 0;
+
   useEffect(() => {
     const fetchData = async () => {
-      await axios
-        .post('http://localhost:5000/api/order/getIndividualProduct', {
-          orderId,
-        })
-        .then((res) => console.log(res.data));
+      const data = await axios.post(
+        'http://localhost:5000/api/order/getIndividualProduct',
+        {
+          orderId: window.location.pathname.substring(8),
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json;charset=UTF-8',
+            'Access-Control-Allow-Origin': '*',
+          },
+        }
+      );
+      setItems(data.data.orderItem);
     };
     fetchData();
   }, []);
+  function getSteps() {
+    if (getItems.length > 0)
+      return [
+        `Ordered 
+        \n ${getItems[0].placedOn}`,
+        'Shipped',
+        'Out For Delivery',
+        `Delivered ${getItems[0].expectedDelivery} `,
+      ];
+    return 'Loading';
+  }
+  const steps = getSteps();
   const handleLogout = () => {
     localStorage.removeItem('authToken');
     sessionStorage.removeItem('checkoutInfo');
@@ -66,7 +89,6 @@ const IndividualOrder = () => {
     window.location.href = 'http://localhost:3000';
   };
   const classes = useStyles();
-  console.log();
   return (
     <div>
       <Drawer
@@ -110,6 +132,101 @@ const IndividualOrder = () => {
           </List>
         </div>
       </Drawer>
+      {getItems.length > 0 && (
+        <Card elevation={3}>
+          <CardContent>
+            <Typography variant="subtitle1" gutterBottom>
+              Delivery Address
+            </Typography>
+            <Typography
+              variant="body2"
+              style={{ fontWeight: 700 }}
+              gutterBottom
+            >
+              {getItems[0].customer.fullName}
+            </Typography>
+            <Typography variant="body2">
+              {getItems[0].shipping.address1} {getItems[0].shipping.address2},
+            </Typography>
+            <Typography
+              variant="body2"
+              gutterBottom
+              style={{ marginBottom: '10px' }}
+            >
+              {getItems[0].shipping.landmark} {getItems[0].shipping.town} -{' '}
+              {getItems[0].shipping.pincode},{' '}
+              {getItems[0].shipping.selectedState}
+            </Typography>
+            <Typography
+              variant="body2"
+              style={{ fontWeight: 700 }}
+              gutterBottom
+            >
+              Phone Number
+            </Typography>
+            <Typography variant="body2">
+              {getItems[0].customer.mobileNumber}
+            </Typography>
+          </CardContent>
+        </Card>
+      )}
+      {getItems.length > 0 && (
+        <div>
+          {Object.keys(getItems[0].items).map((items, i) => (
+            <Card style={{ marginTop: '15px' }} elevation={3} key={i}>
+              <CardContent style={{ display: 'flex', alignItems: 'center' }}>
+                <img
+                  src={getItems[0].items[items].coverImage}
+                  alt={getItems[0].items[items].productName}
+                  style={{ width: '100px', height: '100px' }}
+                />
+                <div style={{ marginLeft: '20px' }}>
+                  <Typography gutterBottom variant="h6" component="h2">
+                    {getItems[0].items[items].productName}
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    color="textSecondary"
+                    component="p"
+                  >
+                    Seller: Artifacts Shop
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    color="textSecondary"
+                    component="p"
+                  >
+                    ₹
+                    {new Intl.NumberFormat('en-IN').format(
+                      getItems[0].items[items].price
+                    )}
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    color="textSecondary"
+                    component="p"
+                  >
+                    Order Id: {getItems[0].orderId}
+                  </Typography>
+                </div>
+                <div>
+                  <Stepper
+                    activeStep={activeStep}
+                    alternativeLabel
+                    style={{ width: '130%' }}
+                  >
+                    {steps.map((label) => (
+                      <Step key={label}>
+                        <StepLabel>{label}</StepLabel>
+                      </Step>
+                    ))}
+                  </Stepper>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

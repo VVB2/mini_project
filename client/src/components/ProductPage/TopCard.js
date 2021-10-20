@@ -5,6 +5,7 @@ import { useHistory } from 'react-router';
 import { Grid, Typography, Card, Divider, Button } from '@material-ui/core';
 import { ShoppingCart, FlashOn } from '@material-ui/icons';
 import { GlassMagnifier } from 'react-image-magnifiers';
+import jwt from 'jsonwebtoken';
 import Carousel from 'react-multi-carousel';
 import 'react-multi-carousel/lib/styles.css';
 import 'react-slideshow-image/dist/styles.css';
@@ -27,6 +28,24 @@ const TopCard = ({ data, images, user }) => {
       isInCart = true;
     }
   }
+  const handleBuyNow = () => {
+    const checkOutInfo = jwt.sign(
+      {
+        cartInfo: [
+          {
+            productName: data[0].title,
+            price: data[0].price,
+            expectedDeliveryDays: data[0].rating,
+            coverImage: data[0].coverImage,
+          },
+        ],
+        username: user._id,
+      },
+      process.env.REACT_APP_JWT_SECRET
+    );
+    sessionStorage.setItem('checkoutInfo', checkOutInfo);
+    window.location.href = 'http://localhost:3000/checkout';
+  };
   const handleAddToCart = async () => {
     if (user.username) {
       try {
@@ -141,6 +160,7 @@ const TopCard = ({ data, images, user }) => {
               {!isInCart ? (
                 <Button
                   startIcon={<FlashOn />}
+                  onClick={handleBuyNow}
                   style={
                     !data[0].isSold
                       ? {

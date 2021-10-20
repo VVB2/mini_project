@@ -86,7 +86,6 @@ const Header = ({ data, isLoggedIn, user }) => {
             onChange={(event, value) => {
               if (value !== null) {
                 window.location.href = `http://localhost:3000/product/${value}`;
-                console.log(event);
               }
             }}
           />

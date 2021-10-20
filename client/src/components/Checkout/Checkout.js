@@ -18,7 +18,6 @@ const Checkout = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
   const next = (data) => {
-    console.log(data);
     setShippingData(data);
     handleNext();
   };

@@ -20,7 +20,6 @@ import CustomText from './CustomText';
 import SavedAddress from './SavedAddress';
 
 const Address = ({ next, cartInfo }) => {
-  console.log(cartInfo.username);
   const [loading, setLoading] = useState(false);
   const [selectedState, setSelectedState] = useState('');
   const [addressType, setAddressType] = useState('');
@@ -82,22 +81,20 @@ const Address = ({ next, cartInfo }) => {
       });
     if (!isValidPhoneNumber.error && !isValidPincode.error) {
       if (checked) {
-        axios
-          .post('http://localhost:5000/api/userPurchaseInfo/create', {
-            shipping: {
-              address1: data.address1,
-              address2: data.address2,
-              landmark: data.landmark,
-              town: data.town,
-              pincode: data.pincode,
-            },
-            customer: {
-              fullName: data.fullName,
-              mobileNumber: data.mobileNumber,
-            },
-            customerId: cartInfo.username,
-          })
-          .then((res) => console.log(res.data.userPurchaseInfo));
+        axios.post('http://localhost:5000/api/userPurchaseInfo/create', {
+          shipping: {
+            address1: data.address1,
+            address2: data.address2,
+            landmark: data.landmark,
+            town: data.town,
+            pincode: data.pincode,
+          },
+          customer: {
+            fullName: data.fullName,
+            mobileNumber: data.mobileNumber,
+          },
+          customerId: cartInfo.username,
+        });
       }
       sessionStorage.setItem(
         'userInfo',
@@ -133,7 +130,6 @@ const Address = ({ next, cartInfo }) => {
         addressType,
       })
     );
-    console.log(preloadedValues);
     window.history.go(0);
   };
   const state = [

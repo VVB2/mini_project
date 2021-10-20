@@ -20,6 +20,8 @@ import PrivateRoute from './PrivateRoute';
 import Profile from './components/Profile/Profile';
 import Cart from './components/Cart/Cart';
 import Checkout from './components/Checkout/Checkout';
+import Orders from './components/Profile/Orders';
+import IndividualOrder from './components/Profile/IndividualOrder';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -106,6 +108,17 @@ function App() {
               exact
               path="/checkout"
               component={Checkout}
+              user={user}
+            />
+            <PrivateRoute
+              exact
+              path="/orders"
+              component={() => <Orders user={user} />}
+              user={user}
+            />
+            <PrivateRoute
+              path="/orders/:id"
+              component={() => <IndividualOrder user={user} />}
               user={user}
             />
             <Route exact path="/" component={LandingPage} />

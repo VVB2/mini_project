@@ -24,8 +24,9 @@ const Payment = ({ back, cartInfo, shippingData }) => {
   let expectedDelivery = 0;
   for (const key in cartInfo.cartInfo) {
     total += cartInfo.cartInfo[key].price;
-    if (cartInfo.cartInfo[key].rating > expectedDelivery)
-      expectedDelivery = cartInfo.cartInfo[key].rating;
+    if (cartInfo.cartInfo[key].expectedDeliveryDays > expectedDelivery) {
+      expectedDelivery = cartInfo.cartInfo[key].expectedDeliveryDays;
+    }
   }
   const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
   const handleSubmit = async (event, elements, stripe) => {
@@ -70,7 +71,7 @@ const Payment = ({ back, cartInfo, shippingData }) => {
         .post('http://localhost:5000/api/order/createOrder', { orderData })
         .then(() => {
           setLoading(false);
-          window.location.href = 'http://localhost:3000';
+          window.location.href = 'http://localhost:3000/orders';
         });
     }
   };

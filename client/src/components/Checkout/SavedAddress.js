@@ -11,7 +11,6 @@ import axios from 'axios';
 
 const SavedAddress = ({ customerId, addToForm }) => {
   const [savedAddress, setSavedAddress] = useState([]);
-  console.log(savedAddress);
   useEffect(() => {
     const fetchData = async () => {
       const { data } = await axios.post(

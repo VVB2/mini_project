@@ -19,7 +19,12 @@ import {
   InputLabel,
   Button,
 } from '@material-ui/core';
-import { AccountCircle, ExitToApp, Save } from '@material-ui/icons';
+import {
+  AccountCircle,
+  ExitToApp,
+  Save,
+  ShoppingBasketOutlined,
+} from '@material-ui/icons';
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme) => ({
@@ -93,6 +98,12 @@ const Profile = ({ user }) => {
                 <AccountCircle />
               </ListItemIcon>
               <ListItemText primary="Profile" />
+            </ListItem>
+            <ListItem button component={Link} to="/orders">
+              <ListItemIcon>
+                <ShoppingBasketOutlined />
+              </ListItemIcon>
+              <ListItemText primary="My Orders" />
             </ListItem>
             <ListItem button onClick={handleLogout}>
               <ListItemIcon>

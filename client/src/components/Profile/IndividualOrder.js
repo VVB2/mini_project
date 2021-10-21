@@ -15,7 +15,7 @@ import {
   StepLabel,
 } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import { moment } from 'moment';
+import moment from 'moment';
 import {
   AccountCircle,
   ExitToApp,
@@ -74,7 +74,7 @@ const IndividualOrder = () => {
     if (getItems.length > 0)
       return [
         `Ordered 
-        \n ${getItems[0].placedOn}`,
+        \n ${moment(getItems[0].placedOn).format('DD MMMM YYYY')}`,
         'Shipped',
         'Out For Delivery',
         `Delivered ${getItems[0].expectedDelivery} `,
@@ -213,7 +213,7 @@ const IndividualOrder = () => {
                   <Stepper
                     activeStep={activeStep}
                     alternativeLabel
-                    style={{ width: '130%' }}
+                    style={{ width: '43vw', top: 0, left: 0 }}
                   >
                     {steps.map((label) => (
                       <Step key={label}>

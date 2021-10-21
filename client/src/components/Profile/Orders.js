@@ -122,7 +122,7 @@ const Orders = ({ user }) => {
             <Card key={item} style={{ margin: '20px 0' }}>
               <CardActionArea
                 component={Link}
-                to={`/orders/${orders[0].orderId}`}
+                to={`/orders/${orders[key].orderId}`}
               >
                 {Object.keys(productDetails[key]).map((i, j) => (
                   <CardContent

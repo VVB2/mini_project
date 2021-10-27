@@ -68,7 +68,7 @@ const Profile = ({ user }) => {
     localStorage.removeItem('authToken');
     sessionStorage.removeItem('checkoutInfo');
     sessionStorage.removeItem('userInfo');
-    window.location.href = 'https://objective-shirley-a0624b.netlify.app';
+    window.location.href = 'https://dazzling-lamport-c2fd9c.netlify.app/';
   };
   const classes = useStyles();
   return (
@@ -195,7 +195,7 @@ const Profile = ({ user }) => {
             }
           );
           window.location.href =
-            'https://objective-shirley-a0624b.netlify.app/profile';
+            'https://dazzling-lamport-c2fd9c.netlify.app/profile';
         }}
       >
         Save changes

@@ -51,13 +51,13 @@ const Orders = ({ user }) => {
   const [orders, setOrders] = useState([]);
   const productDetails = [];
   const handleShopping = () => {
-    window.location.href = 'https://objective-shirley-a0624b.netlify.app/cart';
+    window.location.href = 'https://dazzling-lamport-c2fd9c.netlify.app/cart';
   };
   const handleLogout = () => {
     localStorage.removeItem('authToken');
     sessionStorage.removeItem('checkoutInfo');
     sessionStorage.removeItem('userInfo');
-    window.location.href = 'https://objective-shirley-a0624b.netlify.app';
+    window.location.href = 'https://dazzling-lamport-c2fd9c.netlify.app/';
   };
   useEffect(() => {
     const fetchData = async () => {

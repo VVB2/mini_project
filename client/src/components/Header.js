@@ -88,7 +88,7 @@ const Header = ({ data, isLoggedIn, user }) => {
             )}
             onChange={(event, value) => {
               if (value !== null) {
-                window.location.href = `https://objective-shirley-a0624b.netlify.app/product/${value}`;
+                window.location.href = `https://dazzling-lamport-c2fd9c.netlify.app/product/${value}`;
               }
             }}
           />
@@ -98,9 +98,9 @@ const Header = ({ data, isLoggedIn, user }) => {
             color="inherit"
             onClick={() => {
               if (isLoggedIn)
-                window.location.href = `https://objective-shirley-a0624b.netlify.app/cart`;
+                window.location.href = `https://dazzling-lamport-c2fd9c.netlify.app/cart`;
               else
-                window.location.href = `https://objective-shirley-a0624b.netlify.app/login`;
+                window.location.href = `https://dazzling-lamport-c2fd9c.netlify.app/login`;
             }}
             style={{ margin: 'auto 20px' }}
           >

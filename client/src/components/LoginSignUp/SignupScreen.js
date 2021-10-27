@@ -54,7 +54,7 @@ const SignupScreen = () => {
           config
         );
         localStorage.setItem('authToken', data.token);
-        window.location.href = 'https://objective-shirley-a0624b.netlify.app';
+        window.location.href = 'https://dazzling-lamport-c2fd9c.netlify.app/';
       } catch (error) {
         setSignUpStatus(error.response.data.error);
       }

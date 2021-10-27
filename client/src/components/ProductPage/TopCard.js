@@ -48,7 +48,7 @@ const TopCard = ({ data, images, user }) => {
     );
     sessionStorage.setItem('checkoutInfo', checkOutInfo);
     window.location.href =
-      'https://objective-shirley-a0624b.netlify.app/checkout';
+      'https://dazzling-lamport-c2fd9c.netlify.app/checkout';
   };
   const handleAddToCart = async () => {
     if (user.username) {
@@ -66,7 +66,7 @@ const TopCard = ({ data, images, user }) => {
       }
     } else {
       window.location.href =
-        'https://objective-shirley-a0624b.netlify.app/login';
+        'https://dazzling-lamport-c2fd9c.netlify.app/login';
     }
   };
   return (

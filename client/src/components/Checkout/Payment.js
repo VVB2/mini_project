@@ -74,7 +74,7 @@ const Payment = ({ back, cartInfo, shippingData }) => {
         .then(() => {
           setLoading(false);
           window.location.href =
-            'https://eloquent-wilson-92d008.netlify.app/orders';
+            'https://dazzling-lamport-c2fd9c.netlify.app/orders';
         });
     }
   };

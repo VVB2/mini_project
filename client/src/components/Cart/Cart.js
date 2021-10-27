@@ -38,7 +38,7 @@ const Cart = ({ user }) => {
     );
     sessionStorage.setItem('checkoutInfo', checkOutInfo);
     window.location.href =
-      'https://eloquent-wilson-92d008.netlify.app/checkout';
+      'https://dazzling-lamport-c2fd9c.netlify.app/checkout';
   };
   const handleMultipleCheckout = (cartInfo, userDetails) => {
     const info = [];
@@ -59,11 +59,11 @@ const Cart = ({ user }) => {
     );
     sessionStorage.setItem('checkoutInfo', checkOutInfo);
     window.location.href =
-      'https://eloquent-wilson-92d008.netlify.app/checkout';
+      'https://dazzling-lamport-c2fd9c.netlify.app/checkout';
   };
   const handleShopping = () => {
     window.location.href =
-      'https://eloquent-wilson-92d008.netlify.app/products?p=1';
+      'https://dazzling-lamport-c2fd9c.netlify.app/products?p=1';
   };
   const classes = useStyles();
   const [cartData, setCartData] = useState([]);

@@ -43,8 +43,7 @@ const Checkout = () => {
         }
       );
     } else {
-      window.location.href =
-        'https://objective-shirley-a0624b.netlify.app/cart';
+      window.location.href = 'https://dazzling-lamport-c2fd9c.netlify.app/cart';
     }
   }, []);
   return (

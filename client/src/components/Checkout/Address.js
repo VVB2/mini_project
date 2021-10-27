@@ -81,20 +81,23 @@ const Address = ({ next, cartInfo }) => {
       });
     if (!isValidPhoneNumber.error && !isValidPincode.error) {
       if (checked) {
-        axios.post('http://localhost:5000/api/userPurchaseInfo/create', {
-          shipping: {
-            address1: data.address1,
-            address2: data.address2,
-            landmark: data.landmark,
-            town: data.town,
-            pincode: data.pincode,
-          },
-          customer: {
-            fullName: data.fullName,
-            mobileNumber: data.mobileNumber,
-          },
-          customerId: cartInfo.username,
-        });
+        axios.post(
+          'https://artifacts-shop.herokuapp.com/api/userPurchaseInfo/create',
+          {
+            shipping: {
+              address1: data.address1,
+              address2: data.address2,
+              landmark: data.landmark,
+              town: data.town,
+              pincode: data.pincode,
+            },
+            customer: {
+              fullName: data.fullName,
+              mobileNumber: data.mobileNumber,
+            },
+            customerId: cartInfo.username,
+          }
+        );
       }
       sessionStorage.setItem(
         'userInfo',

@@ -43,9 +43,12 @@ const Header = ({ data, isLoggedIn, user }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const cartData = await axios.post('http://localhost:5000/api/cart', {
-        customerId: user._id,
-      });
+      const cartData = await axios.post(
+        'https://artifacts-shop.herokuapp.com/api/cart',
+        {
+          customerId: user._id,
+        }
+      );
       setCartItemsNumber(cartData.data.artifactInfo.length);
     };
     fetchData();
@@ -85,7 +88,7 @@ const Header = ({ data, isLoggedIn, user }) => {
             )}
             onChange={(event, value) => {
               if (value !== null) {
-                window.location.href = `http://localhost:3000/product/${value}`;
+                window.location.href = `https://objective-shirley-a0624b.netlify.app/product/${value}`;
               }
             }}
           />
@@ -95,8 +98,9 @@ const Header = ({ data, isLoggedIn, user }) => {
             color="inherit"
             onClick={() => {
               if (isLoggedIn)
-                window.location.href = `http://localhost:3000/cart`;
-              else window.location.href = `http://localhost:3000/login`;
+                window.location.href = `https://objective-shirley-a0624b.netlify.app/cart`;
+              else
+                window.location.href = `https://objective-shirley-a0624b.netlify.app/login`;
             }}
             style={{ margin: 'auto 20px' }}
           >

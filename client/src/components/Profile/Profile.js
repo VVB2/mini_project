@@ -68,7 +68,7 @@ const Profile = ({ user }) => {
     localStorage.removeItem('authToken');
     sessionStorage.removeItem('checkoutInfo');
     sessionStorage.removeItem('userInfo');
-    window.location.href = 'http://localhost:3000';
+    window.location.href = 'https://objective-shirley-a0624b.netlify.app';
   };
   const classes = useStyles();
   return (
@@ -187,11 +187,15 @@ const Profile = ({ user }) => {
         startIcon={<Save />}
         style={{ marginTop: '5%' }}
         onClick={async () => {
-          await axios.put('http://localhost:5000/api/auth/updateUser', {
-            username: user.username,
-            profilePicture: sprite,
-          });
-          window.location.href = 'http://localhost:3000/profile';
+          await axios.put(
+            'https://artifacts-shop.herokuapp.com/api/auth/updateUser',
+            {
+              username: user.username,
+              profilePicture: sprite,
+            }
+          );
+          window.location.href =
+            'https://objective-shirley-a0624b.netlify.app/profile';
         }}
       >
         Save changes

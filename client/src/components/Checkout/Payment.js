@@ -68,10 +68,13 @@ const Payment = ({ back, cartInfo, shippingData }) => {
         username: cartInfo.username,
       };
       await axios
-        .post('http://localhost:5000/api/order/createOrder', { orderData })
+        .post('https://artifacts-shop.herokuapp.com/api/order/createOrder', {
+          orderData,
+        })
         .then(() => {
           setLoading(false);
-          window.location.href = 'http://localhost:3000/orders';
+          window.location.href =
+            'https://eloquent-wilson-92d008.netlify.app/orders';
         });
     }
   };

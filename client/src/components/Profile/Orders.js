@@ -51,18 +51,18 @@ const Orders = ({ user }) => {
   const [orders, setOrders] = useState([]);
   const productDetails = [];
   const handleShopping = () => {
-    window.location.href = 'http://localhost:3000/cart';
+    window.location.href = 'https://objective-shirley-a0624b.netlify.app/cart';
   };
   const handleLogout = () => {
     localStorage.removeItem('authToken');
     sessionStorage.removeItem('checkoutInfo');
     sessionStorage.removeItem('userInfo');
-    window.location.href = 'http://localhost:3000';
+    window.location.href = 'https://objective-shirley-a0624b.netlify.app';
   };
   useEffect(() => {
     const fetchData = async () => {
       axios
-        .post('http://localhost:5000/api/order', {
+        .post('https://artifacts-shop.herokuapp.comapi/order', {
           customerId: user._id,
         })
         .then((res) => setOrders(res.data.orderItem));

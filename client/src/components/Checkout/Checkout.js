@@ -43,7 +43,8 @@ const Checkout = () => {
         }
       );
     } else {
-      window.location.href = 'http://localhost:3000/cart';
+      window.location.href =
+        'https://objective-shirley-a0624b.netlify.app/cart';
     }
   }, []);
   return (

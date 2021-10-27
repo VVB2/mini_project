@@ -41,12 +41,12 @@ const LoginScreen = () => {
     } else {
       try {
         const { data } = await axios.post(
-          'http://localhost:5000/api/auth/login',
+          'https://artifacts-shop.herokuapp.com/api/auth/login',
           { email, password },
           config
         );
         localStorage.setItem('authToken', data.token);
-        window.location.href = 'http://localhost:3000';
+        window.location.href = 'https://objective-shirley-a0624b.netlify.app';
       } catch (error) {
         setLoginStatus(error.response.data.error);
       }

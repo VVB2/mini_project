@@ -55,7 +55,7 @@ const IndividualOrder = () => {
   useEffect(() => {
     const fetchData = async () => {
       const data = await axios.post(
-        'http://localhost:5000/api/order/getIndividualProduct',
+        'https://artifacts-shop.herokuapp.comapi/order/getIndividualProduct',
         {
           orderId: window.location.pathname.substring(8),
         },
@@ -86,7 +86,7 @@ const IndividualOrder = () => {
     localStorage.removeItem('authToken');
     sessionStorage.removeItem('checkoutInfo');
     sessionStorage.removeItem('userInfo');
-    window.location.href = 'http://localhost:3000';
+    window.location.href = 'https://objective-shirley-a0624b.netlify.app';
   };
   const classes = useStyles();
   return (

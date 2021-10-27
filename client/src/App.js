@@ -44,9 +44,11 @@ function App() {
     pageLoaded.current = true;
     const fetchData = () => {
       // search all the names for autocoplete text field
-      axios.get('http://localhost:5000/api/products/names').then((res) => {
-        setName(res.data.data);
-      });
+      axios
+        .get('https://artifacts-shop.herokuapp.comapi/products/names')
+        .then((res) => {
+          setName(res.data.data);
+        });
     };
     fetchData();
     return pageLoaded;
@@ -68,7 +70,7 @@ function App() {
             if (moment(moment.unix(exp).format()).isAfter(moment().format())) {
               axios
                 .post(
-                  'http://localhost:5000/api/auth/userDetails',
+                  'https://artifacts-shop.herokuapp.comapi/auth/userDetails',
                   { jwtEncodedUser: localStorage.getItem('authToken') },
                   config
                 )

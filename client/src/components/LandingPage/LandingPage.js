@@ -21,7 +21,7 @@ const LandingPage = () => {
     const fetchData = async () => {
       setLoading(true);
       await axios
-        .get('http://localhost:5000/api/products/landingPage')
+        .get('https://artifacts-shop.herokuapp.com/api/products/landingPage')
         .then((res) => {
           setData(res.data.data);
           setPrice(res.data.price);

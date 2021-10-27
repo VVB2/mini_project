@@ -49,12 +49,12 @@ const SignupScreen = () => {
     else {
       try {
         const { data } = await axios.post(
-          'http://localhost:5000/api/auth/register',
+          'https://artifacts-shop.herokuapp.com/api/auth/register',
           { username, email, password },
           config
         );
         localStorage.setItem('authToken', data.token);
-        window.location.href = 'http://localhost:3000';
+        window.location.href = 'https://objective-shirley-a0624b.netlify.app';
       } catch (error) {
         setSignUpStatus(error.response.data.error);
       }

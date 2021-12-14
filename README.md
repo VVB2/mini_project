@@ -2,7 +2,7 @@
 
 ## About this project
 
-This is a **`MERN stack`** **E-Commerce** artifacts website purpose of the project is to builda platform for Artistss who
+This is a **`MERN stack`** **E-Commerce** artifacts website purpose of the project is to build a platform for Artists who
 are great at their work and wish not to limit their talent and
 also scale their talent. \
 Also for the art lovers who do not wish to leave theirr town

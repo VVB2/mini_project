@@ -133,3 +133,20 @@ You need to have [**node**](https://nodejs.org/en/) as well as [**npm**](https:/
 -   **`server/models`** - contains the database models
 -   **`server/routes`** - all the **API** endpoints which the client can hit
 -   **`server/utils`** - contains the utility `.js` files for ease of project building
+
+---
+
+## Some of the UI images
+
+![LandinPage](images/LandingPage.png)\
+Home Page
+
+![LoginPage](images/LoginPage.png)\
+Login Page
+
+![SignupPage](images/SignupPage.png)\
+Sign up Page
+
+#### Other Images will be found [**here**](images)
+
+---

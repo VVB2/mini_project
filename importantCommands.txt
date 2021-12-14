@@ -1,1 +1,0 @@
-db.artifactsdatas.updateMany({isSold:true},{$set:{isSold:false}})

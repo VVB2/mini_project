@@ -17,9 +17,7 @@ const DepartmentWiseProducts = ({ location }) => {
     const fetchData = () => {
       setLoading(true);
       axios
-        .get(
-          `https://artifacts-shop.herokuapp.com/api/products/department?dept=${dept}`
-        )
+        .get(`http://localhost:5000/api/products/department?dept=${dept}`)
         .then((res) => {
           setData(res.data.products);
           setLoading(false);

@@ -55,7 +55,7 @@ const IndividualOrder = () => {
   useEffect(() => {
     const fetchData = async () => {
       const data = await axios.post(
-        'https://artifacts-shop.herokuapp.comapi/order/getIndividualProduct',
+        'http://localhost:5000/api/order/getIndividualProduct',
         {
           orderId: window.location.pathname.substring(8),
         },
@@ -86,7 +86,7 @@ const IndividualOrder = () => {
     localStorage.removeItem('authToken');
     sessionStorage.removeItem('checkoutInfo');
     sessionStorage.removeItem('userInfo');
-    window.location.href = 'https://dazzling-lamport-c2fd9c.netlify.app/';
+    window.location.href = 'http://localhost:3000';
   };
   const classes = useStyles();
   return (

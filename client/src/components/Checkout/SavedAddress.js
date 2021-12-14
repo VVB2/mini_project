@@ -14,7 +14,7 @@ const SavedAddress = ({ customerId, addToForm }) => {
   useEffect(() => {
     const fetchData = async () => {
       const { data } = await axios.post(
-        'https://artifacts-shop.herokuapp.com/api/userPurchaseInfo',
+        'http://localhost:5000/api/userPurchaseInfo',
         { customerId }
       );
       setSavedAddress(data.userPurchaseInfo);

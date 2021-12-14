@@ -23,7 +23,7 @@ const ArtifactsCards = ({ location }) => {
     const fetchData = async () => {
       setIsloading(true);
       await axios
-        .get(`https://artifacts-shop.herokuapp.com/api/products/?page=${page}`)
+        .get(`http://localhost:5000/api/products/?page=${page}`)
         .then((res) => {
           setData(res.data.data);
           setIsloading(false);

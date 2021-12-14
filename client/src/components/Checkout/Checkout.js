@@ -43,7 +43,7 @@ const Checkout = () => {
         }
       );
     } else {
-      window.location.href = 'https://dazzling-lamport-c2fd9c.netlify.app/cart';
+      window.location.href = 'http://localhost:3000/cart';
     }
   }, []);
   return (

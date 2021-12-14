@@ -16,12 +16,9 @@ const TopCard = ({ data, images, user }) => {
   let isInCart = false;
   useEffect(() => {
     const fetchData = async () => {
-      const cartData = await axios.post(
-        'https://artifacts-shop.herokuapp.com/api/cart',
-        {
-          customerId: user._id,
-        }
-      );
+      const cartData = await axios.post('http://localhost:5000/api/cart', {
+        customerId: user._id,
+      });
       setCartItems(cartData.data.cartItem);
     };
     if (user) fetchData();
@@ -47,26 +44,21 @@ const TopCard = ({ data, images, user }) => {
       process.env.REACT_APP_JWT_SECRET
     );
     sessionStorage.setItem('checkoutInfo', checkOutInfo);
-    window.location.href =
-      'https://dazzling-lamport-c2fd9c.netlify.app/checkout';
+    window.location.href = 'http://localhost:3000/checkout';
   };
   const handleAddToCart = async () => {
     if (user.username) {
       try {
-        await axios.post(
-          'https://artifacts-shop.herokuapp.com/api/cart/addToCart',
-          {
-            customerId: user._id,
-            productName: data[0].title,
-          }
-        );
+        await axios.post('http://localhost:5000/api/cart/addToCart', {
+          customerId: user._id,
+          productName: data[0].title,
+        });
         history.go(0);
       } catch (error) {
         console.log(error);
       }
     } else {
-      window.location.href =
-        'https://dazzling-lamport-c2fd9c.netlify.app/login';
+      window.location.href = 'http://localhost:3000/login';
     }
   };
   return (

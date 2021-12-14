@@ -37,8 +37,7 @@ const Cart = ({ user }) => {
       process.env.REACT_APP_JWT_SECRET
     );
     sessionStorage.setItem('checkoutInfo', checkOutInfo);
-    window.location.href =
-      'https://dazzling-lamport-c2fd9c.netlify.app/checkout';
+    window.location.href = 'http://localhost:3000/checkout';
   };
   const handleMultipleCheckout = (cartInfo, userDetails) => {
     const info = [];
@@ -58,26 +57,21 @@ const Cart = ({ user }) => {
       process.env.REACT_APP_JWT_SECRET
     );
     sessionStorage.setItem('checkoutInfo', checkOutInfo);
-    window.location.href =
-      'https://dazzling-lamport-c2fd9c.netlify.app/checkout';
+    window.location.href = 'http://localhost:3000/checkout';
   };
   const handleShopping = () => {
-    window.location.href =
-      'https://dazzling-lamport-c2fd9c.netlify.app/products?p=1';
+    window.location.href = 'http://localhost:3000/products?p=1';
   };
   const classes = useStyles();
   const [cartData, setCartData] = useState([]);
   let totalPrice = 0;
   const handleRemove = async (data) => {
-    await axios.delete(
-      'https://artifacts-shop.herokuapp.com/api/cart/removeFromCart',
-      {
-        data: {
-          customerId: user._id,
-          productName: data,
-        },
-      }
-    );
+    await axios.delete('http://localhost:5000/api/cart/removeFromCart', {
+      data: {
+        customerId: user._id,
+        productName: data,
+      },
+    });
     window.history.go(0);
   };
 
@@ -90,7 +84,7 @@ const Cart = ({ user }) => {
   useEffect(() => {
     const fetchData = async () => {
       axios
-        .post('https://artifacts-shop.herokuapp.com/api/cart', {
+        .post('http://localhost:5000/api/cart', {
           customerId: user._id,
         })
         .then((res) => {

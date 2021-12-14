@@ -68,7 +68,7 @@ const Profile = ({ user }) => {
     localStorage.removeItem('authToken');
     sessionStorage.removeItem('checkoutInfo');
     sessionStorage.removeItem('userInfo');
-    window.location.href = 'https://dazzling-lamport-c2fd9c.netlify.app/';
+    window.location.href = 'http://localhost:3000';
   };
   const classes = useStyles();
   return (
@@ -187,15 +187,11 @@ const Profile = ({ user }) => {
         startIcon={<Save />}
         style={{ marginTop: '5%' }}
         onClick={async () => {
-          await axios.put(
-            'https://artifacts-shop.herokuapp.com/api/auth/updateUser',
-            {
-              username: user.username,
-              profilePicture: sprite,
-            }
-          );
-          window.location.href =
-            'https://dazzling-lamport-c2fd9c.netlify.app/profile';
+          await axios.put('http://localhost:5000/api/auth/updateUser', {
+            username: user.username,
+            profilePicture: sprite,
+          });
+          window.location.href = 'http://localhost:3000/profile';
         }}
       >
         Save changes

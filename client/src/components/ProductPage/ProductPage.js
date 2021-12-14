@@ -22,9 +22,7 @@ const ProductPage = ({ user }) => {
       });
       setIsLoading(true);
       axios
-        .get(
-          `https://artifacts-shop.herokuapp.com/api/products/productByName/${title}`
-        )
+        .get(`http://localhost:5000/api/products/productByName/${title}`)
         .then((res) => {
           setProduct(res.data.productDetails);
           setSimilarProducts(res.data.similarProducts);

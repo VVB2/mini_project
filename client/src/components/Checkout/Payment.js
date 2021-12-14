@@ -68,13 +68,12 @@ const Payment = ({ back, cartInfo, shippingData }) => {
         username: cartInfo.username,
       };
       await axios
-        .post('https://artifacts-shop.herokuapp.com/api/order/createOrder', {
+        .post('http://localhost:5000/api/order/createOrder', {
           orderData,
         })
         .then(() => {
           setLoading(false);
-          window.location.href =
-            'https://dazzling-lamport-c2fd9c.netlify.app/orders';
+          window.location.href = 'http://localhost:3000/orders';
         });
     }
   };

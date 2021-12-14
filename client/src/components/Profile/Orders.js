@@ -51,18 +51,18 @@ const Orders = ({ user }) => {
   const [orders, setOrders] = useState([]);
   const productDetails = [];
   const handleShopping = () => {
-    window.location.href = 'https://dazzling-lamport-c2fd9c.netlify.app/cart';
+    window.location.href = 'http://localhost:3000/cart';
   };
   const handleLogout = () => {
     localStorage.removeItem('authToken');
     sessionStorage.removeItem('checkoutInfo');
     sessionStorage.removeItem('userInfo');
-    window.location.href = 'https://dazzling-lamport-c2fd9c.netlify.app/';
+    window.location.href = 'http://localhost:3000';
   };
   useEffect(() => {
     const fetchData = async () => {
       axios
-        .post('https://artifacts-shop.herokuapp.comapi/order', {
+        .post('http://localhost:5000/api/order', {
           customerId: user._id,
         })
         .then((res) => setOrders(res.data.orderItem));

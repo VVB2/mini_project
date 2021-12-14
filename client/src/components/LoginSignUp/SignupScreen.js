@@ -49,12 +49,12 @@ const SignupScreen = () => {
     else {
       try {
         const { data } = await axios.post(
-          'https://artifacts-shop.herokuapp.com/api/auth/register',
+          'http://localhost:5000/api/auth/register',
           { username, email, password },
           config
         );
         localStorage.setItem('authToken', data.token);
-        window.location.href = 'https://dazzling-lamport-c2fd9c.netlify.app/';
+        window.location.href = 'http://localhost:3000';
       } catch (error) {
         setSignUpStatus(error.response.data.error);
       }

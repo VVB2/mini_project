@@ -41,12 +41,12 @@ const LoginScreen = () => {
     } else {
       try {
         const { data } = await axios.post(
-          'https://artifacts-shop.herokuapp.com/api/auth/login',
+          'http://localhost:5000/api/auth/login',
           { email, password },
           config
         );
         localStorage.setItem('authToken', data.token);
-        window.location.href = 'https://dazzling-lamport-c2fd9c.netlify.app/';
+        window.location.href = 'http://localhost:3000';
       } catch (error) {
         setLoginStatus(error.response.data.error);
       }

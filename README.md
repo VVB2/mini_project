@@ -89,6 +89,84 @@ You need to have [**node**](https://nodejs.org/en/) as well as [**npm**](https:/
     -   **`index.js`** - the main `.js` file
     -   **`PrivateRoute.js`** - defines all the private routes that only the **Logged In** user can access
 
+```
+client/
+├── [4.0K]  build
+│   ├── [1.1K]  asset-manifest.json
+│   ├── [ 32K]  favicon.ico
+│   ├── [2.1K]  index.html
+│   ├── [361K]  sold_out.png
+│   └── [4.0K]  static
+│       ├── [4.0K]  css
+│       │   ├── [4.6K]  2.81dde01e.chunk.css
+│       │   └── [7.1K]  2.81dde01e.chunk.css.map       
+│       ├── [4.0K]  js
+│       │   ├── [1.5M]  2.61e82582.chunk.js
+│       │   ├── [4.0K]  2.61e82582.chunk.js.LICENSE.txt
+│       │   ├── [5.5M]  2.61e82582.chunk.js.map        
+│       │   ├── [ 67K]  main.076ddfee.chunk.js
+│       │   ├── [173K]  main.076ddfee.chunk.js.map     
+│       │   ├── [1.5K]  runtime-main.a9f80a17.js       
+│       │   └── [8.1K]  runtime-main.a9f80a17.js.map   
+│       └── [4.0K]  media
+│           ├── [ 12K]  emptyCart.b5fe7e5c.png
+│           ├── [ 12K]  revicons.57fd05d4.ttf
+│           ├── [ 12K]  revicons.a77de540.eot
+│           ├── [7.4K]  revicons.e8746a62.woff
+│           └── [361K]  sold_out.74289aa2.png
+├── [1.6M]  package-lock.json
+├── [2.0K]  package.json
+├── [4.0K]  public
+│   ├── [ 32K]  favicon.ico
+│   ├── [ 498]  index.html
+│   └── [361K]  sold_out.png
+└── [4.0K]  src
+    ├── [4.8K]  App.js
+    ├── [ 412]  PrivateRoute.js
+    ├── [ 838]  Test.js
+    ├── [4.0K]  assets
+    │   ├── [203K]  Data.json
+    │   ├── [ 12K]  emptyCart.png
+    │   ├── [361K]  sold_out.png
+    │   └── [5.3K]  testData.json
+    ├── [4.0K]  components
+    │   ├── [4.0K]  Cards
+    │   │   ├── [2.5K]  ArtifactsCard.js
+    │   │   └── [1.9K]  ArtifactsCards.js
+    │   ├── [4.0K]  Cart
+    │   │   └── [ 14K]  Cart.js
+    │   ├── [4.0K]  Checkout
+    │   │   ├── [8.3K]  Address.js
+    │   │   ├── [1.8K]  Checkout.js
+    │   │   ├── [ 754]  CustomText.js
+    │   │   ├── [4.0K]  Payment.js
+    │   │   ├── [1.5K]  ReviewOrder.js
+    │   │   └── [2.8K]  SavedAddress.js
+    │   ├── [4.0K]  DepartmentWise
+    │   │   └── [1.1K]  DepartmentWiseProducts.js
+    │   ├── [4.0K]  Header.js
+    │   ├── [4.0K]  LandingPage
+    │   │   ├── [1.8K]  LandingCards.js
+    │   │   ├── [2.5K]  LandingPage.js
+    │   │   └── [ 899]  LandingPage.loading.js
+    │   ├── [4.0K]  Loading
+    │   │   └── [1.1K]  Loading.js
+    │   ├── [4.0K]  LoginSignUp
+    │   │   ├── [1.0K]  Auth.styles.js
+    │   │   ├── [5.6K]  LoginScreen.js
+    │   │   └── [7.8K]  SignupScreen.js
+    │   ├── [4.0K]  ProductPage
+    │   │   ├── [3.1K]  BottomCards.js
+    │   │   ├── [2.0K]  ProductPage.js
+    │   │   ├── [6.8K]  ProductPage.loading.js
+    │   │   └── [ 12K]  TopCard.js
+    │   └── [4.0K]  Profile
+    │       ├── [6.6K]  IndividualOrder.js
+    │       ├── [6.8K]  Orders.js
+    │       └── [5.2K]  Profile.js
+    └── [ 146]  index.js
+```
+
 ---
 
 ## Server side project setup
@@ -133,6 +211,40 @@ You need to have [**node**](https://nodejs.org/en/) as well as [**npm**](https:/
 -   **`server/models`** - contains the database models
 -   **`server/routes`** - all the **API** endpoints which the client can hit
 -   **`server/utils`** - contains the utility `.js` files for ease of project building
+
+```
+server/
+├── [  19]  Procfile
+├── [4.0K]  config
+│   └── [ 516]  database.js
+├── [4.0K]  controllers
+│   ├── [2.1K]  cartController.js
+│   ├── [1.8K]  orderController.js
+│   ├── [3.4K]  productsController.js
+│   ├── [2.0K]  userController.js
+│   └── [1.4K]  userPurchaseInfoController.js
+├── [4.0K]  middleware
+│   ├── [ 847]  auth.js
+│   └── [ 649]  error.js
+├── [4.0K]  models
+│   ├── [ 576]  Artifacts.model.js
+│   ├── [ 288]  Cart.model.js
+│   ├── [ 494]  Order.model.js
+│   ├── [1.6K]  User.model.js
+│   └── [ 306]  UserPurchaseInfo.model.js
+├── [166K]  package-lock.json
+├── [ 710]  package.json
+├── [4.0K]  routes
+│   ├── [ 441]  Cart.js
+│   ├── [ 482]  Order.js
+│   ├── [ 717]  Products.js
+│   ├── [ 517]  User.js
+│   └── [ 412]  UserPurchaseInfo.js
+├── [ 860]  server.js
+└── [4.0K]  utils
+    ├── [ 178]  errorResponse.js
+    └── [ 667]  sendEmail.js
+```
 
 ---
 
